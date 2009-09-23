@@ -13,7 +13,7 @@
 == Server Requirements ==
 
  * A PHP-compliant webserver (tested with Apache/2.2.11)
- * PHP 5.0.0 or higher (tested with PHP/5.2.6-3ubuntu4.2)
+ * PHP 5.0.0 or higher (tested with PHP/5.2.6-3ubuntu4.2) with cURL support
 
 == Client Requirements ==
 
