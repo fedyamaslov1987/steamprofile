@@ -1,0 +1,64 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="de" lang="de">
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+	<title>SteamProfile Example</title>
+	<!--
+	SteamProfile uses jQuery, so you need to include the framework.
+	You can also use public URLs, e.g. http://ajax.googleapis.com/ajax/libs/jquery/1.3.2/jquery.min.js
+	-->
+	<script type="text/javascript" src="js/jquery-1.3.2.min.js"></script>
+	<!--
+	The SteamProfile script itself.
+	-->
+	<script type="text/javascript" src="js/steamprofile.js"></script>
+	<!--
+	The default stylesheet theme for SteamProfile. Required for the proper look and template hiding.
+	-->
+	<link rel="stylesheet" type="text/css" href="themes/steamcom/style.css" />
+</head>
+<body>
+
+<!-- Put this template somewhere in your page body. It will be hidden by the theme stylesheet. -->
+<div id="steamprofile-template">
+	<div class="profile">
+		<div class="avatar">
+			<a href="#" rel="external">
+				<img src="" alt="Avatar" />
+			</a>
+		</div>
+		<div class="info">
+			<a href="#" rel="external"></a><br />
+		</div>
+		<div class="menu">
+			<span><span></span></span>
+			<ul>
+				<li><a href="#" class="joingame">Join Game</a></li>
+				<li><a href="#" class="addfriend">Add to Friends</a></li>
+			</ul>
+		</div>
+	</div>
+	<div class="loading">
+		Loading...
+	</div>
+	<div class="error">
+		Error:
+	</div>
+</div>
+<!-- template end -->
+
+<!--
+Each <div> with the class "steamprofile" will be automatically replaced
+with the profile for the containing ID.
+The ID can be a Steam-ID, a Steam Community number (Steam-ID 64) or the
+profile alias. Beside the ID, whitespaces and line breaks are allowed,
+anything else will cause errors.
+-->
+<div class="steamprofile">76561197965018417</div>
+<div class="steamprofile">robinwalker</div>
+<div class="steamprofile">
+	STEAM_0:0:148902
+</div>
+
+</body>
+</html>

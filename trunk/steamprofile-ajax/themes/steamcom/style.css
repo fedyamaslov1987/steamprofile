@@ -1,0 +1,147 @@
+#steamprofile-template {
+	display: none;
+}
+
+.steamprofile * {
+	font-size: 10px;
+	font-family: tahoma,Arial,Helvetica,sans-serif;
+}
+
+.steamprofile {
+	width: 254px;
+	height: 48px;
+	padding: 4px;
+	background: url(images/background.png) no-repeat;
+	overflow: hidden;
+	visibility: hidden;
+}
+
+.steamprofile .loading {
+	width: 80px;
+	height: 32px;
+	margin: auto 0;
+	background: url(images/loading.gif) no-repeat;
+	color: #898989;
+	padding-left: 48px;
+	padding-top: 6px;
+	font-size: 16px;
+}
+
+.steamprofile:hover {
+	background: url(images/background_hover.png) no-repeat;
+}
+
+.steamprofile .avatar {
+	float: left;
+	width: 40px;
+	height: 40px;
+}
+
+.steamprofile .avatar img  {
+	border: none;
+	margin: 4px;
+}
+
+.steamprofile .info {
+	float: left;
+	margin-left: 5px;
+}
+
+.steamprofile .info a {
+	font-weight: bold;
+	text-decoration: none;
+}
+
+.steamprofile .in-game .avatar {
+	background-image: url(images/iconholder_ingame.png);
+}
+
+.steamprofile .in-game {
+	color: #8bc53f;
+}
+
+.steamprofile .in-game a {
+	color: #b1fb50;
+}
+
+.steamprofile .online .avatar {
+	background-image: url(images/iconholder_online.png);
+}
+
+.steamprofile .online {
+	color: #6f9fc8;
+}
+
+.steamprofile .online a {
+	color: #8ecbff;
+}
+
+.steamprofile .offline .avatar {
+	background-image: url(images/iconholder_offline.png);
+}
+
+.steamprofile .offline .info, .steamprofile .offline .info a {
+	color: #898989;
+}
+
+.steamprofile .menu {
+	position: absolute;
+	left: 148px;
+	width: 100px;
+}
+.steamprofile .menu span {
+	width: 13px;
+	height: 13px;
+	float: right;
+}
+
+.steamprofile .menu span:hover {
+	background: url('images/arrow-hover.png') no-repeat;
+}
+
+.steamprofile .online .menu span span {
+	background: url('images/arrow-online.png') no-repeat;
+}
+
+.steamprofile .offline .menu span span {
+	background: url('images/arrow-offline.png') no-repeat;
+}
+
+.steamprofile .in-game .menu span span {
+	background: url('images/arrow-ingame.png') no-repeat;
+}
+
+.steamprofile .menu span span:hover {
+	cursor: pointer;
+}
+
+.steamprofile .menu ul {
+	background-color: #2F312D;
+	border: 1px solid #686A65;
+	margin: 0;
+	margin-right: 15px;
+	padding: 0;
+	list-style-type: none;
+}
+
+.steamprofile .menu, .steamprofile .menu a {
+	color: #d8d8d8;
+	text-decoration: none;
+}
+
+.steamprofile .menu li {
+	padding: 3px;
+}
+
+.steamprofile .menu li:hover {
+	background-color: #91863C;
+}
+
+.steamprofile .error {
+	color: #ff4444;
+	font-size: 12px;
+	background: url('images/cross.png') 6px center no-repeat;
+	padding: 0 8px 0 32px;
+	margin: 0;
+	margin-top: .5em;
+}
