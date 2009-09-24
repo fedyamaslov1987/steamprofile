@@ -8,40 +8,38 @@
 	You can also use public URLs, e.g. http://ajax.googleapis.com/ajax/libs/jquery/1.3.2/jquery.min.js
 	-->
 	<script type="text/javascript" src="js/jquery-1.3.2.min.js"></script>
-	<!--
-	The SteamProfile script itself.
-	-->
+	<!-- The SteamProfile script itself. -->
 	<script type="text/javascript" src="js/steamprofile.js"></script>
-	<!--
-	The default stylesheet theme for SteamProfile. Required for the proper look and template hiding.
-	-->
+	<!-- The default stylesheet theme for SteamProfile. Required for the proper look and template hiding. -->
 	<link rel="stylesheet" type="text/css" href="themes/steamcom/style.css" />
 </head>
 <body>
 
 <!-- Put this template somewhere in your page body. It will be hidden by the theme stylesheet. -->
 <div id="steamprofile-template">
-	<div class="profile">
-		<div class="avatar">
+	<div class="sp-profile">
+		<div class="sp-avatar">
 			<a href="#" rel="external">
-				<img src="" alt="Avatar" />
+				<img src="" alt="" />
 			</a>
 		</div>
-		<div class="info">
+		<div class="sp-info">
 			<a href="#" rel="external"></a><br />
 		</div>
-		<div class="menu">
-			<span><span></span></span>
-			<ul>
-				<li><a href="#" class="joingame">Join Game</a></li>
-				<li><a href="#" class="addfriend">Add to Friends</a></li>
-			</ul>
+		<div class="sp-extra">
+			<div class="sp-handle"></div>
+			<div class="sp-extra-content">
+				<ul>
+					<li class="sp-joingame"><a href="#">Join Game</a></li>
+					<li class="sp-addfriend"><a href="#">Add to Friends</a></li>
+				</ul>
+			</div>
 		</div>
 	</div>
-	<div class="loading">
+	<div class="sp-loading">
 		Loading...
 	</div>
-	<div class="error">
+	<div class="sp-error">
 		Error:
 	</div>
 </div>
