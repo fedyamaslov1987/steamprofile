@@ -41,10 +41,10 @@ class SteamProfileXMLProxyApp {
 	public function run() {
 		try {
 			// response to XMLHttpRequest only
-			if($this->bXMLHttpRequestOnly
-				&& !isset($_SERVER['HTTP_X_REQUESTED_WITH'])
+			if($this->bXMLHttpRequestOnly && (
+				!isset($_SERVER['HTTP_X_REQUESTED_WITH'])
 				|| $_SERVER['HTTP_X_REQUESTED_WITH'] != 'XMLHttpRequest'
-			) {
+			)) {
 				header('HTTP/1.1 204 No Content');
 				return;
 			}
