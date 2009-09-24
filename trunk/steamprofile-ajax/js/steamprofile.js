@@ -26,9 +26,9 @@ var errorTpl;
 
 $(document).ready(function() {
 	// select templates
-	profileTpl = $("#steamprofile-template .profile");
-	loadingTpl = $("#steamprofile-template .loading");
-	errorTpl = $("#steamprofile-template .error");
+	profileTpl = $("#steamprofile-template .sp-profile");
+	loadingTpl = $("#steamprofile-template .sp-loading");
+	errorTpl = $("#steamprofile-template .sp-error");
 	
 	// select profile placeholders
 	profiles = $(".steamprofile");
@@ -82,27 +82,27 @@ function createProfile(profile, request, status) {
 			
 			// set state class, avatar image and name
 			profileTmp.removeClass("profile").addClass(onlineState);
-			profileTmp.find(".avatar img").attr("src", profileData.find("profile > avatarIcon").text());
-			profileTmp.find(".info a").append(profileData.find("profile > steamID").text());
+			profileTmp.find(".sp-avatar img").attr("src", profileData.find("profile > avatarIcon").text());
+			profileTmp.find(".sp-info a").append(profileData.find("profile > steamID").text());
 			
 			// set state message
 			if (profileData.find("profile > visibilityState").text() == "1") {
-				profileTmp.find(".info").append("This profile is private.");
+				profileTmp.find(".sp-info").append("This profile is private.");
 			} else {
-				profileTmp.find(".info").append(profileData.find("profile > stateMessage").text());
+				profileTmp.find(".sp-info").append(profileData.find("profile > stateMessage").text());
 			}
 
 			if (onlineState == "in-game") {
 				// add "Join Game" link href
-				profileTmp.find(".menu .joingame")
+				profileTmp.find(".sp-joingame a")
 					.attr("href", profileData.find("profile > inGameInfo > gameJoinLink").text());
 			} else {
 				// the user is not ingame, remove "Join Game" link
-				profileTmp.find(".menu .joingame").parent().remove();
+				profileTmp.find(".sp-joingame").remove();
 			}
 			
 			// add other link hrefs
-			profileTmp.find(".menu .addfriend")
+			profileTmp.find(".sp-addfriend")
 				.attr("href", "steam://friends/add/" + profileData.find("profile > steamID64").text());
 			profileTmp.find("a[rel=external]")
 				.attr("href", "http://steamcommunity.com/profiles/" + profileData.find("profile > steamID64").text());
@@ -111,9 +111,8 @@ function createProfile(profile, request, status) {
 			profile = profile.empty().append(profileTmp);
 			
 			// add events for menu
-			profile.find(".menu ul").hide();
-			profile.find(".menu span > span").click(function() {
-				profile.find(".menu ul").slideToggle("fast"); 
+			profile.find(".sp-handle").click(function() {
+				profile.find(".sp-extra-content").toggle(200);
 			});
 		}
 	} else if (profileData.find("response").length != 0) {
