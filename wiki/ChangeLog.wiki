@@ -1,0 +1,10 @@
+#summary Changelog for the releases of SteamProfile
+#labels Featured
+
+== 2.0 Ajax Beta 2 ==
+ * Replaced the arrow drop-down menu with a slider menu for the Steam Community links
+ * Cleaned up template and themes
+ * Fixed a error message when bXMLHttpRequestOnly is set to false
+
+== 2.0 Ajax Beta 1 ==
+ * First release
