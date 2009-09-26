@@ -60,7 +60,7 @@ class SteamProfileXMLProxyApp {
 			$sXMLUrl = 'http://steamcommunity.com/';
 
 			// choose if we got a numeric id or an alias
-			if($SteamID->getSteamComID() == '') {
+			if(!$SteamID->isValid()) {
 				// complain about invalid characters, if found
 				if(!preg_match('/^[a-zA-Z0-9-_]+$/', $sID)) {
 					throw new RuntimeException("Invalid profile alias");

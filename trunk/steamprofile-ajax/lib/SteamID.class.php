@@ -53,12 +53,16 @@ class SteamID {
 	public function getSteamComID() {
 		return $this->sSteamComID;
 	}
+	
+	public function isValid() {
+		return $this->sSteamID != '';
+	}
 
-	public function isValidSteamID($sSteamID) {
+	private function isValidSteamID($sSteamID) {
 		return preg_match('/^(STEAM_)?[0-5]:[0-9]:\d+$/i', $sSteamID);
 	}
 
-	public function isValidComID($sSteamComID) {
+	private function isValidComID($sSteamComID) {
 		// anything else than a number is invalid
 		// (is_numeric() doesn't work for 64 bit integers)
 		if(!preg_match('/^\d+$/i', $sSteamComID)) {
@@ -70,7 +74,7 @@ class SteamID {
 			return false;
 		}
 
-		// TODO: Is there a maximum?
+		// TODO: upper limit?
 
 		return true;
 	}
