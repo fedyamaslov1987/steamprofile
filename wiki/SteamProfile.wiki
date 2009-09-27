@@ -6,7 +6,11 @@
 
 = Installation and Usage =
 
-*todo*
+Extract archive to desired folder on your webserver. The directory _xml/_ must be read- and writable for the webserver, because it is used as cache for the XML proxy.
+
+You can change configurations for the XML proxy in _xmlproxy-config.php_.
+
+See example.html for examples and instructions for proper embedding into your website.
 
 = Requirements =
 
