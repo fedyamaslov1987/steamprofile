@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<steamprofile-config>
+	<theme>steamcom</theme>
+	<templates>
+		<profile>
+		<![CDATA[
+			<div>
+				<div class="avatar">
+					<a rel="external" href="">
+						<img src="" alt="" />
+					</a>
+				</div>
+				<div class="info">
+					<a rel="external" href=""></a><br />
+				</div>
+				<div class="extra">
+					<div class="handle"></div>
+					<div class="content">
+						<ul>
+							<li class="joingame"><a href="">Join Game</a></li>
+							<li class="addfriend"><a href="">Add to Friends</a></li>
+						</ul>
+					</div>
+				</div>
+			</div>
+		]]>
+		</profile>
+		<loading>
+		<![CDATA[
+			<div>
+				<div class="loading">
+					Loading...
+				</div>
+			</div>
+		]]>
+		</loading>
+		<error>
+		<![CDATA[
+			<div>
+				<div class="error">
+					Error:
+				</div>
+			</div>
+		]]>
+		</error>
+	</templates>
+</steamprofile-config>
