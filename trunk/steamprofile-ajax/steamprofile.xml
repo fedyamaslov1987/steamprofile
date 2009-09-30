@@ -5,21 +5,20 @@
 		<profile>
 		<![CDATA[
 			<div>
-				<div class="avatar">
+				<div class="sp-avatar">
 					<a rel="external" href="">
-						<img src="" alt="" />
+						<img src="" width="32" height="32" alt="" />
 					</a>
 				</div>
-				<div class="info">
+				<div class="sp-info">
 					<a rel="external" href=""></a><br />
 				</div>
-				<div class="extra">
-					<div class="handle"></div>
-					<div class="content">
-						<ul>
-							<li class="joingame"><a href="">Join Game</a></li>
-							<li class="addfriend"><a href="">Add to Friends</a></li>
-						</ul>
+				<div class="sp-extra">
+					<div class="sp-handle"></div>
+					<div class="sp-content">
+						<a class="sp-joingame" title="Join Game" href=""><img src="" width="16" height="16" alt="" /></a>
+						<a class="sp-addfriend" title="Add to Friends" href=""><img src="" width="16" height="16" alt="" /></a>
+						<a class="sp-viewitems" title="View Items" href="" rel="external"><img src="" width="16" height="16" alt="" /></a>
 					</div>
 				</div>
 			</div>
@@ -28,7 +27,8 @@
 		<loading>
 		<![CDATA[
 			<div>
-				<div class="loading">
+				<div class="sp-loading">
+					<img src="" width="32" height="32" alt="" />
 					Loading...
 				</div>
 			</div>
@@ -37,8 +37,8 @@
 		<error>
 		<![CDATA[
 			<div>
-				<div class="error">
-					Error:
+				<div class="sp-error">
+					<img src="" width="16" height="16" alt="Error" />
 				</div>
 			</div>
 		]]>

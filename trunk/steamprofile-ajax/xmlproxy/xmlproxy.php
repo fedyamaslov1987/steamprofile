@@ -26,7 +26,7 @@ function exception_error_handler($errno, $errstr, $errfile, $errline) {
 set_error_handler("exception_error_handler");
 
 // set error reporting level
-error_reporting(E_ALL);
+error_reporting(E_ERROR | E_WARNING | E_PARSE);
 
 // load config
 require_once 'config.php';

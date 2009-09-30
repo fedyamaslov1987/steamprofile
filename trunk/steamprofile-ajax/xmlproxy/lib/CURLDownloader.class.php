@@ -64,6 +64,10 @@ class CURLDownloader {
 		return $this->getInfo(CURLINFO_HTTP_CODE);
 	}
 
+	public function getErrorMessage() {
+		return curl_error($this->cURLSession);
+	}
+
 	public function start() {
 		return curl_exec($this->cURLSession);
 	}

@@ -20,6 +20,6 @@
  */
 
 $bXMLHttpRequestOnly = true;	// if true, the proxy will response to XMLHttpRequest only
-$iCacheLifetime = 300;			// time in seconds where xml documents are cached for future requests
+$iCacheLifetime = 600;			// time in seconds where xml documents are cached for future requests
 $iTimeout = 10;					// time in seconds before the connection to the server will time out
 ?>

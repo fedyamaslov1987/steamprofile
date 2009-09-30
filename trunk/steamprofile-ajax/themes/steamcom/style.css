@@ -22,80 +22,84 @@
 	text-decoration: none;
 }
 
-.steamprofile .loading {
-	width: 80px;
-	height: 32px;
-	margin: auto 0;
-	background: url(images/loading.gif) no-repeat;
-	color: #898989;
-	padding-left: 48px;
-	margin-left: 0.5em;
-	margin-top: 0.5em;
-	font-size: 16px;
+.steamprofile img  {
+	border: none;
 }
 
-.steamprofile .error {
+.steamprofile .sp-loading {
+	color: #606060;
+	font-size: 20px;
+	margin: 4px;
+}
+
+.steamprofile .sp-loading img {
+	vertical-align: middle;
+	margin-right: 4px;
+}
+
+.steamprofile .sp-error {
 	color: #ff4444;
 	font-size: 12px;
-	background: url('images/cross.png') 6px center no-repeat;
-	padding-left: 32px;
-	margin-top: 1.5em;
+	margin: 4px;
+}
+
+.steamprofile .sp-error img {
+	vertical-align: middle;
 }
 
 .steamprofile:hover {
 	background-color: #313131;
 }
 
-.steamprofile .avatar {
+.steamprofile .sp-avatar {
 	float: left;
 	width: 40px;
 	height: 40px;
 	margin-right: 4px;
 }
 
-.steamprofile .avatar img  {
-	border: none;
+.steamprofile .sp-avatar img  {
 	margin: 4px;
 }
 
-.steamprofile .info a {
+.steamprofile .sp-info a {
 	font-weight: bold;
 }
 
-.steamprofile .in-game .avatar {
+.steamprofile .sp-in-game .sp-avatar {
 	background-image: url(images/iconholder_ingame.png);
 }
 
-.steamprofile .in-game {
+.steamprofile .sp-in-game {
 	color: #8bc53f;
 }
 
-.steamprofile .in-game a {
+.steamprofile .sp-in-game a {
 	color: #b1fb50;
 }
 
-.steamprofile .online .avatar {
+.steamprofile .sp-online .sp-avatar {
 	background-image: url(images/iconholder_online.png);
 }
 
-.steamprofile .online {
+.steamprofile .sp-online {
 	color: #6f9fc8;
 }
 
-.steamprofile .online a {
+.steamprofile .sp-online a {
 	color: #8ecbff;
 }
 
-.steamprofile .offline .avatar {
+.steamprofile .sp-offline .sp-avatar {
 	background-image: url(images/iconholder_offline.png);
 }
 
-.steamprofile .offline .info,
-.steamprofile .offline .info a {
+.steamprofile .sp-offline .sp-info,
+.steamprofile .sp-offline .sp-info a {
 	color: #898989;
 }
 
-.steamprofile .extra {
+.steamprofile .sp-extra {
 	display: block;
 	position: absolute;
 	z-index: 1;
@@ -105,7 +109,7 @@
 	height: 50px;
 }
 
-.steamprofile .handle {
+.steamprofile .sp-handle {
 	width: 16px;
 	height: 50px;
 	display: block;
@@ -116,51 +120,30 @@
 	background: url(images/handle.png) right center no-repeat;
 }
 
-.steamprofile .handle:hover {
+.steamprofile .sp-handle:hover {
 	cursor: pointer;
 }
 
-.steamprofile .content {
+.steamprofile .sp-content {
+	white-space: nowrap;
 	height: 50px;
 	padding: 6px;
+	padding-top: 16px;
 	display: none;
 }
 
-.steamprofile .content a {
-	color: #5d5d5e;
-}
-
-.steamprofile .content a:hover {
-	color: #99977e;
-}
-
-.steamprofile .content ul {
+.steamprofile .sp-content ul {
 	list-style: none;
+	float: left;
 }
 
-.steamprofile .content li {
+.steamprofile .sp-content li {
 	height: 16px;
 	padding-left: 18px;
 	margin: 2px;
 }
 
-.steamprofile .content a:hover {
+.steamprofile .sp-content a:hover {
 	text-decoration: underline;
 	color: #ffffff;
-}
-
-.steamprofile li.joingame {
-	background: url(images/icon_join_game.png) left center no-repeat;
-}
-
-.steamprofile li.joingame a {
-	color: #8bc53f;
-}
-
-.steamprofile li.addfriend {
-	background: url(images/icon_add_friend.png) left center no-repeat;
-}
-
-.steamprofile li.addfriend a {
-	color: #62a7e3;
 }

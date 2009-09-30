@@ -89,9 +89,14 @@ class SteamID {
 			$sComID = bcmul($sAuth, "2"); // multipy Auth-ID with 2
 			$sComID = bcadd($sComID, $sServer); // add Server-ID
 			$sComID = bcadd($sComID, self::STEAMID64_BASE); // add this odd long number
+			
+			// It seems that PHP appends ".0000000000" at the end sometimes.
+			// I can't find a reason for this, so I'll take the dirty way...
+			$sComID = str_replace('.0000000000', '', $sComID);
+			
 			return $sComID;
 		} else {
-			throw new SteamProfileException("Unable to convert Steam-ID");
+			throw new RuntimeException("Unable to convert Steam-ID");
 		}
 	}
 

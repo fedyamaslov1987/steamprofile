@@ -81,10 +81,12 @@ class CacheEntry {
 		$this->iLifetime = (int)$iLifetime;
 	}
 
+	public function isStored() {
+		return file_exists($this->sPath);
+	}
+	
 	public function isCached() {
-		$sCachePath = $this->getPath();
-
-		return file_exists($sCachePath) && ($this->iLifetime == -1 || time() - filemtime($sCachePath) <= $this->iLifetime);
+		return $this->isStored() && ($this->iLifetime == -1 || time() - filemtime($this->sPath) <= $this->iLifetime);
 	}
 
 	public function getPath() {

@@ -20,7 +20,7 @@
  */
 
 class SteamProfileXMLProxyApp {
-	const VERSION = '2.0b1';
+	const VERSION = '2.0b4';
 	
 	private $bXMLHttpRequestOnly = true;
 	private $iCacheLifetime = 600;
@@ -73,30 +73,57 @@ class SteamProfileXMLProxyApp {
 
 			// add xml parameter so we get xml data (hopefully)
 			$sXMLUrl .= '?xml=1';
+			
+			//exit($SteamID->getSteamComID().' - '.$sXMLUrl);
 
 			$Cache = new CacheManager('xml', $this->iCacheLifetime, 'xml');
 			$CacheEntry = $Cache->getEntry($sXMLUrl);
 
 			// do we have a cached version of the xml document?
 			if(!$CacheEntry->isCached()) {
-				$cURL = new SteamProfileDownloader($sXMLUrl, self::VERSION);
-				$cURL->setOutputFile($CacheEntry->getPath());
-				$cURL->setTimeout($this->iTimeout);
-			
 				try {
-					if($cURL->start() === false) {
-						throw new RuntimeException("Steam Community server offline");
-					}
+					// temporary file for downloading
+					$sTmpFile = tempnam('xml', 'curl_');
+					
+					// start the downloader
+					$cURL = new SteamProfileDownloader($sXMLUrl, self::VERSION);
+					$cURL->setOutputFile($sTmpFile);
+					$cURL->setTimeout($this->iTimeout);
+					
+					try {
+						if($cURL->start() === false) {
+							throw new RuntimeException('Proxy error: '.$cURL->getErrorMessage());
+						}
 
-					if($cURL->getHTTPCode() != 200) {
-						throw new RuntimeException("Steam Community server error");
+						if($cURL->getHTTPCode() != 200) {
+							throw new RuntimeException('Steam Community server error ('.$cURL->getHTTPCode().')');
+						}
+					} catch(Exception $e) {
+						$cURL->close();
+						unlink($sTmpFile);
+						throw $e;
+					}
+					
+					$cURL->close();
+					
+					// check if the downloader actually downloaded anything
+					if(filesize($sTmpFile) == 0) {
+						unlink($sTmpFile);
+						throw new RuntimeException('Steam Community server error');
+					} else {
+						rename($sTmpFile, $CacheEntry->getPath());
 					}
 				} catch(Exception $e) {
-					$cURL->close();
-					throw $e;
-				}
+					if(file_exists($sTmpFile)) {
+						unlink($sTmpFile);
+					}
 				
-				$cURL->close();
+					// downloading failed, but maybe we can redirect to the old file
+					if(!$CacheEntry->isStored()) {
+						// no, we can't
+						throw $e;
+					}
+				}
 			}
 			
 			// redirect to xml file
