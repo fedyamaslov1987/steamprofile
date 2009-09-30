@@ -111,15 +111,18 @@ function SteamProfile() {
 					profileCache[profileID] = createProfile($(request.responseXML));
 					// replace placeholder with profile
 					profile.empty().append(profileCache[profileID]);
+					// load next profile
+					loadProfile(profileIndex);
 				}
 			});
 		} else {
 			// the profile was build previously, just copy it
-			profile.empty().append(profileCache[profileID]);
+			var profileCopy = profileCache[profileID].clone();
+			createEvents(profileCopy);
+			profile.empty().append(profileCopy);
+			// load next profile
+			loadProfile(profileIndex);
 		}
-		
-		// load next profile
-		loadProfile(profileIndex);
 	}
 
 	function createProfile(profileData) {
@@ -170,10 +173,7 @@ function SteamProfile() {
 				profile.find("sp-avatar a, sp-info a")
 					.attr("href", "http://steamcommunity.com/profiles/" + profileData.find("profile > steamID64").text());
 				
-				// add events for menu
-				profile.find(".sp-handle").click(function() {
-					profile.find(".sp-content").toggle(200);
-				});
+				createEvents(profile);
 			}
 			
 			return profile;
@@ -184,6 +184,13 @@ function SteamProfile() {
 			// we got invalid xml data
 			return createError("Invalid community data.");
 		}
+	}
+	
+	function createEvents(profile) {
+		// add events for menu
+		profile.find(".sp-handle").click(function() {
+			profile.find(".sp-content").toggle(200);
+		});
 	}
 
 	function createError(message) {
