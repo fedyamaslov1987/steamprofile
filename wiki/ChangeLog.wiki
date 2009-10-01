@@ -3,6 +3,11 @@
 
 =SteamProfile Ajax=
 
+== 2.0 Beta 5 ==
+ * Fixed permission issues with XML files
+ * Fixed links to steamcommunity.com not set properly
+ * Links to external sites now will open in a separate tab
+
 == 2.0 Beta 4 ==
  * Improved stylesheet for loading state and error messages
  * Replaced labeled icons with simple icons in the slider menu
