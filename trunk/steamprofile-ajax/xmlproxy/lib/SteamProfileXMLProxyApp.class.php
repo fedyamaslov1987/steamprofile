@@ -83,7 +83,8 @@ class SteamProfileXMLProxyApp {
 			if(!$CacheEntry->isCached()) {
 				try {
 					// temporary file for downloading
-					$sTmpFile = tempnam('xml', 'curl_');
+					//$sTmpFile = tempnam('xml', 'curl_');
+					$sTmpFile = 'xml/'.uniqid('curl_').'.xml';
 					
 					// start the downloader
 					$cURL = new SteamProfileDownloader($sXMLUrl, self::VERSION);
