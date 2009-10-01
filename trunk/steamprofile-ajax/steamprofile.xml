@@ -6,19 +6,19 @@
 		<![CDATA[
 			<div>
 				<div class="sp-avatar">
-					<a rel="external" href="">
+					<a target="_blank" href="">
 						<img src="" width="32" height="32" alt="" />
 					</a>
 				</div>
 				<div class="sp-info">
-					<a rel="external" href=""></a><br />
+					<a target="_blank" href=""></a><br />
 				</div>
 				<div class="sp-extra">
 					<div class="sp-handle"></div>
 					<div class="sp-content">
 						<a class="sp-joingame" title="Join Game" href=""><img src="" width="16" height="16" alt="" /></a>
 						<a class="sp-addfriend" title="Add to Friends" href=""><img src="" width="16" height="16" alt="" /></a>
-						<a class="sp-viewitems" title="View Items" href="" rel="external"><img src="" width="16" height="16" alt="" /></a>
+						<a class="sp-viewitems" title="View Items" href="" target="_blank"><img src="" width="16" height="16" alt="" /></a>
 					</div>
 				</div>
 			</div>
