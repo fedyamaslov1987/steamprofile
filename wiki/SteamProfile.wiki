@@ -1,14 +1,10 @@
 #summary SteamProfile Overview
 
-= Overview =
-
-*todo*
-
 = Installation and Usage =
 
-Extract archive to desired folder on your webserver. The directory _xml/_ must be read- and writable for the webserver, because it is used as cache for the XML proxy.
+Extract archive to desired folder on your webserver. The directory _xmlproxy/xml/_ must be read- and writable for the webserver, since it is used for caching for the XML proxy.
 
-You can change configurations for the XML proxy in _xmlproxy-config.php_.
+You can change configurations for the XML proxy in _xmlproxy/xmlproxy-config.php_. For client configuration and template editing, open _steamprofile.xml_.
 
 See example.html for examples and instructions for proper embedding into your website.
 
