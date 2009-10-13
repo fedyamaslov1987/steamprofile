@@ -2,7 +2,7 @@
 
 = Installation and Usage =
 
-Extract archive to desired folder on your webserver. The directory _xmlproxy/xml/_ must be read- and writable for the webserver, since it is used for caching for the XML proxy.
+Extract archive to desired folder on your webserver. The directory _xmlproxy/xml/_ is used for caching, therefore it must be read- and writable for the web server process.
 
 You can change configurations for the XML proxy in _xmlproxy/xmlproxy-config.php_. For client configuration and template editing, open _steamprofile.xml_.
 
