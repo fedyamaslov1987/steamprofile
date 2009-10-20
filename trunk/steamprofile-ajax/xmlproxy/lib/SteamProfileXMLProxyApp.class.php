@@ -20,7 +20,7 @@
  */
 
 class SteamProfileXMLProxyApp {
-	const VERSION = '2.0b4';
+	const VERSION = '2.0b6';
 	
 	private $bXMLHttpRequestOnly = true;
 	private $iCacheLifetime = 600;
@@ -42,8 +42,8 @@ class SteamProfileXMLProxyApp {
 		try {
 			// response to XMLHttpRequest only
 			if($this->bXMLHttpRequestOnly && (
-				!isset($_SERVER['HTTP_X_REQUESTED_WITH'])
-				|| $_SERVER['HTTP_X_REQUESTED_WITH'] != 'XMLHttpRequest'
+				!isset($_SERVER['HTTP_X_REQUESTED_WITH']) ||
+				$_SERVER['HTTP_X_REQUESTED_WITH'] != 'XMLHttpRequest'
 			)) {
 				header('HTTP/1.1 204 No Content');
 				return;
@@ -82,43 +82,53 @@ class SteamProfileXMLProxyApp {
 			// do we have a cached version of the xml document?
 			if(!$CacheEntry->isCached()) {
 				try {
-					// temporary file for downloading
-					//$sTmpFile = tempnam('xml', 'curl_');
-					$sTmpFile = 'xml/'.uniqid('curl_').'.xml';
-					
 					// start the downloader
 					$cURL = new SteamProfileDownloader($sXMLUrl, self::VERSION);
-					$cURL->setOutputFile($sTmpFile);
+					$cURL->setReturnTransfer(true);
 					$cURL->setTimeout($this->iTimeout);
+					$sXMLDoc = '';
 					
 					try {
-						if($cURL->start() === false) {
+						$sXMLDoc = $cURL->start();
+						
+						// false means cURL failed
+						if($sXMLDoc === false) {
 							throw new RuntimeException('Proxy error: '.$cURL->getErrorMessage());
 						}
-
-						if($cURL->getHTTPCode() != 200) {
+						
+						// anything else than status code 2xx is most likely bad
+						$iHTTPCode = $cURL->getHTTPCode();
+						if($iHTTPCode < 200 && $iHTTPCode > 299) {
 							throw new RuntimeException('Steam Community server error ('.$cURL->getHTTPCode().')');
 						}
 					} catch(Exception $e) {
 						$cURL->close();
-						unlink($sTmpFile);
 						throw $e;
 					}
 					
+					// close cURL handle
 					$cURL->close();
 					
 					// check if the downloader actually downloaded anything
-					if(filesize($sTmpFile) == 0) {
-						unlink($sTmpFile);
+					if(strlen($sXMLDoc) == 0) {
 						throw new RuntimeException('Steam Community server error');
-					} else {
-						rename($sTmpFile, $CacheEntry->getPath());
 					}
+					
+					// remove certain control characters that are misleadingly send by the API,
+					// which are invalid in XML 1.0
+					$aCtlChr = array();
+
+					for($i = 0; $i < 32; $i++) {
+						// tab, lf and cr are allowed
+						if($i == 9 || $i == 10 || $i == 13) continue;
+						$aCtlChr[] = chr($i);
+					}
+
+					$sXMLDoc = str_replace($aCtlChr, '', $sXMLDoc);
+					
+					// save document to cache
+					$CacheEntry->saveString($sXMLDoc);
 				} catch(Exception $e) {
-					if(file_exists($sTmpFile)) {
-						unlink($sTmpFile);
-					}
-				
 					// downloading failed, but maybe we can redirect to the old file
 					if(!$CacheEntry->isStored()) {
 						// no, we can't

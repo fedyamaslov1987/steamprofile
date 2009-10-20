@@ -92,6 +92,14 @@ class CacheEntry {
 	public function getPath() {
 		return $this->sPath;
 	}
+	
+	public function loadString() {
+		return file_get_contents($this->sPath);
+	}
+	
+	public function saveString($sContent) {
+		return file_put_contents($this->sPath, $sContent);
+	}
 
 	public function copyFrom($sPath) {
 		return copy($sPath, $this->sPath);
