@@ -20,6 +20,7 @@
 
 $(document).ready(function() {
 	SteamProfile = new SteamProfile();
+	SteamProfile.init();
 });
 
 function SteamProfile() {
@@ -27,6 +28,7 @@ function SteamProfile() {
 	var themePath;
 	var profiles = new Array();
 	var profileCache = new Object();
+	var configLoaded = false;
 	var configData;
 	var profileTpl;
 	var loadingTpl;
@@ -34,7 +36,7 @@ function SteamProfile() {
 
 	this.init = function() {
 		// get our <script>-tag
-		var scriptElement = $("script[src$=\"steamprofile.js\"]");
+		var scriptElement = $('script[src$=\'steamprofile.js\']');
 		
 		// in rare cases, this script could be included without <script>
 		if(scriptElement.length == 0) {
@@ -42,13 +44,13 @@ function SteamProfile() {
 		}
 		
 		// extract the path from the src attribute
-		basePath = scriptElement.attr("src").replace("steamprofile.js", "");
+		basePath = scriptElement.attr('src').replace('steamprofile.js', '');
 		
 		// load xml config
 		jQuery.ajax({
-			type: "GET",
-			url: basePath + "steamprofile.xml",
-			dataType: "html",
+			type: 'GET',
+			url: basePath + 'steamprofile.xml',
+			dataType: 'html',
 			complete: function(request, status) {
 				configData = $(request.responseXML);
 				loadConfig();
@@ -56,21 +58,14 @@ function SteamProfile() {
 		});
 	}
 	
-	function loadConfig() {
-		// set theme stylesheet
-		themePath = basePath + "themes/" + configData.find("theme").text() + "/";
-		$("link#steamprofile-theme").attr("href", themePath + "style.css");
+	this.refresh = function() {
+		// make sure we got a loaded config already
+		if(!configLoaded) {
+			return;
+		}
 		
-		// load templates
-		profileTpl = $(configData.find("templates > profile").text());
-		loadingTpl = $(configData.find("templates > loading").text());
-		errorTpl   = $(configData.find("templates > error").text());
-		
-		// set loading image
-		loadingTpl.find("img").attr("src", themePath + "images/loading.gif");
-
 		// select profile placeholders
-		profiles = $(".steamprofile[title]");
+		profiles = $('.steamprofile[title]');
 		
 		// are there any profiles to build?
 		if(profiles.length == 0) {
@@ -80,15 +75,35 @@ function SteamProfile() {
 		// store profile id for later usage
 		profiles.each(function() {
 			var profile = $(this);
-			profile.data("profileID", $.trim(profile.attr("title")));
-			profile.removeAttr("title");
+			profile.data('profileID', $.trim(profile.attr('title')));
+			profile.removeAttr('title');
 		});
 
 		// replace placeholders with loading template and make them visible
 		profiles.empty().append(loadingTpl);
-
+		
 		// load first profile
 		loadProfile(0);
+	}
+	
+	function loadConfig() {
+		// set theme stylesheet
+		themePath = basePath + 'themes/' + configData.find('theme').text() + '/';
+		$('head').append($('<link rel="stylesheet" type="text/css" href="' + themePath + 'style.css">'));
+		
+		// load templates
+		profileTpl = $(configData.find('templates > profile').text());
+		loadingTpl = $(configData.find('templates > loading').text());
+		errorTpl   = $(configData.find('templates > error').text());
+		
+		// set loading image
+		loadingTpl.find('img').attr('src', themePath + 'images/loading.gif');
+		
+		// we can now unlock the refreshing function
+		configLoaded = true;
+		
+		// start loading profiles
+		SteamProfile.refresh();
 	}
 
 	function loadProfile(profileIndex) {
@@ -98,14 +113,14 @@ function SteamProfile() {
 		}
 		
 		var profile = $(profiles[profileIndex++]);
-		var profileID = profile.data("profileID");
+		var profileID = profile.data('profileID');
 		
 		if(profileCache[profileID] == null) {
 			// load xml data
 			jQuery.ajax({
-				type: "GET",
-				url: basePath + "xmlproxy/xmlproxy.php?id=" + escape(profileID),
-				dataType: "xml",
+				type: 'GET',
+				url: basePath + 'xmlproxy/xmlproxy.php?id=' + escape(profileID),
+				dataType: 'xml',
 				complete: function(request, status) {
 					// build profile and cache DOM for following IDs
 					profileCache[profileID] = createProfile($(request.responseXML));
@@ -126,82 +141,80 @@ function SteamProfile() {
 	}
 
 	function createProfile(profileData) {
-		if (profileData.find("profile").length != 0) {
-			if (profileData.find("profile > steamID").text() == "") {
+		if (profileData.find('profile').length != 0) {
+			if (profileData.find('profile > steamID').text() == '') {
 				// the profile doesn't exists yet
-				return createError("This user has not yet set up their Steam Community profile.");
+				return createError('This user has not yet set up their Steam Community profile.');
 			} else {
 				// profile data looks good
 				var profile = profileTpl.clone();
-				var onlineState = profileData.find("profile > onlineState").text();
+				var onlineState = profileData.find('profile > onlineState').text();
 				
 				// set state class, avatar image and name
-				profile.addClass("sp-" + onlineState);
-				profile.find(".sp-avatar img").attr("src", profileData.find("profile > avatarIcon").text());
-				profile.find(".sp-info a").append(profileData.find("profile > steamID").text());
+				profile.addClass('sp-' + onlineState);
+				profile.find('.sp-avatar img').attr('src', profileData.find('profile > avatarIcon').text());
+				profile.find('.sp-info a').append(profileData.find('profile > steamID').text());
 				
 				// set state message
-				if (profileData.find("profile > visibilityState").text() == "1") {
-					profile.find(".sp-info").append("This profile is private.");
+				if (profileData.find('profile > visibilityState').text() == '1') {
+					profile.find('.sp-info').append('This profile is private.');
 				} else {
-					profile.find(".sp-info").append(profileData.find("profile > stateMessage").text());
+					profile.find('.sp-info').append(profileData.find('profile > stateMessage').text());
 				}
 				
 				// add icons
-				profile.find(".sp-addfriend img").attr("src", themePath + "images/icon_add_friend.png");
-				profile.find(".sp-viewitems img").attr("src", themePath + "images/icon_view_items.png");
+				profile.find('.sp-addfriend img').attr('src', themePath + 'images/icon_add_friend.png');
+				profile.find('.sp-viewitems img').attr('src', themePath + 'images/icon_view_items.png');
 
-				if (onlineState == "in-game") {
-					// add "Join Game" link href
-					profile.find(".sp-joingame")
-						.attr("href", profileData.find("profile > inGameInfo > gameJoinLink").text())
-						.find("img").attr("src", themePath + "images/icon_join_game.png");
+				if (onlineState == 'in-game') {
+					// add 'Join Game' link href
+					profile.find('.sp-joingame')
+						.attr('href', profileData.find('profile > inGameInfo > gameJoinLink').text())
+						.find('img').attr('src', themePath + 'images/icon_join_game.png');
 				} else {
-					// the user is not ingame, remove "Join Game" link
-					profile.find(".sp-joingame").remove();
+					// the user is not ingame, remove 'Join Game' link
+					profile.find('.sp-joingame').remove();
 				}
 				
-				// add "View Items" link href
-				profile.find(".sp-viewitems")
-					.attr("href", "http://tf2items.com/profiles/" + profileData.find("profile > steamID64").text());
+				// add 'View Items' link href
+				profile.find('.sp-viewitems')
+					.attr('href', 'http://tf2items.com/profiles/' + profileData.find('profile > steamID64').text());
 				
-				// // add "Add Friend" link href
-				profile.find(".sp-addfriend")
-					.attr("href", "steam://friends/add/" + profileData.find("profile > steamID64").text());
+				// // add 'Add Friend' link href
+				profile.find('.sp-addfriend')
+					.attr('href', 'steam://friends/add/' + profileData.find('profile > steamID64').text());
 				
 				// add other link hrefs
-				profile.find(".sp-avatar a, .sp-info a")
-					.attr("href", "http://steamcommunity.com/profiles/" + profileData.find("profile > steamID64").text());
+				profile.find('.sp-avatar a, .sp-info a')
+					.attr('href', 'http://steamcommunity.com/profiles/' + profileData.find('profile > steamID64').text());
 				
 				createEvents(profile);
 			}
 			
 			return profile;
-		} else if (profileData.find("response").length != 0) {
+		} else if (profileData.find('response').length != 0) {
 			// steam community returned a message
-			return createError(profileData.find("response > error").text());
+			return createError(profileData.find('response > error').text());
 		} else {
 			// we got invalid xml data
-			return createError("Invalid community data.");
+			return createError('Invalid community data.');
 		}
 	}
 	
 	function createEvents(profile) {
 		// add events for menu
-		profile.find(".sp-handle").click(function() {
-			profile.find(".sp-content").toggle(200);
+		profile.find('.sp-handle').click(function() {
+			profile.find('.sp-content').toggle(200);
 		});
 	}
 
 	function createError(message) {
 		var errorTmp = errorTpl.clone();
-		errorTmp.find(".sp-error")
+		errorTmp.find('.sp-error')
 			.append(message)
-			.find("img").attr("src", themePath + "images/cross.png");
+			.find('img').attr('src', themePath + 'images/cross.png');
 		return errorTmp;
 	}
-	
-	this.init();
 };
 
 

@@ -1,5 +1,5 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="de" lang="de">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
 <head>
 	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 	<title>SteamProfile Example</title>
@@ -9,23 +9,19 @@
 	1st line: SteamProfile uses jQuery, so you need to include the framework.
 	          You can also use public URLs, e.g. http://ajax.googleapis.com/ajax/libs/jquery/1.3.2/jquery.min.js
 	2nd line: The SteamProfile itself, must be included after jQuery
-	3rd line: The stylesheet-placeholder for the theme (required for Internet Explorer)
 	-->
 	<script type="text/javascript" src="steamprofile-ajax/jquery-1.3.2.min.js"></script>
 	<script type="text/javascript" src="steamprofile-ajax/steamprofile.js"></script>
-	<link id="steamprofile-theme" rel="stylesheet" type="text/css" />
 </head>
 <body>
-
-<!--
-Each <div> with the class "steamprofile" will be automatically extended
-with the profile for the ID set in "title".
-The ID can be a Steam-ID, a Steam Community number (Steam-ID 64) or the
-profile alias.
--->
-<div class="steamprofile" title="76561197965018417"></div>
-<div class="steamprofile" title="robinwalker"></div>
-<div class="steamprofile" title="STEAM_0:0:11101"></div>
-
+	<!--
+	Each <div> with the class "steamprofile" will be automatically extended
+	with the profile for the ID set in "title".
+	The ID can be a Steam-ID, a Steam Community number (Steam-ID 64) or the
+	profile alias.
+	-->
+	<div class="steamprofile" title="76561197965018417"></div>
+	<div class="steamprofile" title="robinwalker"></div>
+	<div class="steamprofile" title="nineaxis"></div>
 </body>
 </html>
