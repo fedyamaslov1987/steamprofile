@@ -17,4 +17,14 @@ See example.html for examples and instructions for proper embedding into your we
 
 == Client Requirements ==
 
- * Any modern browser (tested with Firefox 3.5 and Internet Explorer 8)
+ * Any modern browser
+
+=== Browser Compatibility ===
+ * *no problems:*
+  * Firefox 3.5
+  * Opera 10.0
+  * Internet Explorer 8
+  * Safari 4.0
+  * Chrome 3.0
+ * *major problems:*
+   * Internet Explorer 6
