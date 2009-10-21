@@ -28,6 +28,7 @@ function SteamProfile() {
 	var themePath;
 	var profiles = new Array();
 	var profileCache = new Object();
+	var loadLock = false;
 	var configLoaded = false;
 	var configData;
 	var profileTpl;
@@ -59,10 +60,14 @@ function SteamProfile() {
 	}
 	
 	this.refresh = function() {
-		// make sure we got a loaded config already
-		if(!configLoaded) {
+		// make sure we already got a loaded config
+		// and no pending profile loads
+		if(!configLoaded || loadLock) {
 			return;
 		}
+		
+		// lock loading
+		loadLock = true;
 		
 		// select profile placeholders
 		profiles = $('.steamprofile[title]');
@@ -84,6 +89,41 @@ function SteamProfile() {
 		
 		// load first profile
 		loadProfile(0);
+	}
+	
+	this.load = function(profileID) {
+		// make sure we already got a loaded config
+		// and no pending profile loads
+		if(!configLoaded || loadLock) {
+			return;
+		}
+		
+		// create profile base
+		profile = $('<div class="steamprofile"></div>');
+		
+		// add loading template
+		profile.append(loadingTpl);
+		
+		// load xml data
+		jQuery.ajax({
+			type: 'GET',
+			url: getXMLProxyURL(profileID),
+			dataType: 'xml',
+			complete: function(request, status) {
+				// build profile and replace placeholder with profile
+				profile.empty().append(createProfile($(request.responseXML)));
+			}
+		});
+		
+		return profile;
+	}
+	
+	this.isLocked = function() {
+		return loadLock;
+	}
+	
+	function getXMLProxyURL(profileID) {
+		return basePath + 'xmlproxy/xmlproxy.php?id=' + escape(profileID);
 	}
 	
 	function loadConfig() {
@@ -109,6 +149,8 @@ function SteamProfile() {
 	function loadProfile(profileIndex) {
 		// check if we have loaded all profiles already
 		if(profileIndex >= profiles.length) {
+			// unlock loading
+			loadLock = false;
 			return;
 		}
 		
@@ -119,7 +161,7 @@ function SteamProfile() {
 			// load xml data
 			jQuery.ajax({
 				type: 'GET',
-				url: basePath + 'xmlproxy/xmlproxy.php?id=' + escape(profileID),
+				url: getXMLProxyURL(profileID),
 				dataType: 'xml',
 				complete: function(request, status) {
 					// build profile and cache DOM for following IDs
