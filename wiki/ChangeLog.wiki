@@ -4,7 +4,7 @@
 = SteamProfile Ajax =
 
 == 2.0 Beta 6 ==
- * Added a XML filter for control characters that are misleadingly send by the Steam Community API to avid "Invalid community data"-errors for non-IE browsers
+ * Added a XML filter for control characters that are misleadingly send by the Steam Community API to avoid "Invalid community data"-errors for non-IE browsers
  * Added the "refresh"-function to support placeholders that are inserted via DOM manipulation
  * Added the "load"-function to load single profiles on the fly
  * Updated example page to introduce the new function
