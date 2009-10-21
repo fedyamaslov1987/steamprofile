@@ -89,7 +89,7 @@ function SteamProfile() {
 	function loadConfig() {
 		// set theme stylesheet
 		themePath = basePath + 'themes/' + configData.find('theme').text() + '/';
-		$('head').append($('<link rel="stylesheet" type="text/css" href="' + themePath + 'style.css">'));
+		$('head').append('<link rel="stylesheet" type="text/css" href="' + themePath + 'style.css">');
 		
 		// load templates
 		profileTpl = $(configData.find('templates > profile').text());
