@@ -19,15 +19,15 @@
  *	along with SteamProfile.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-class SteamProfileXMLProxyApp {
+class SteamProfileXmlProxyApp {
 	const VERSION = '2.0b6';
 	
-	private $bXMLHttpRequestOnly = true;
+	private $bXmlHttpRequestOnly = true;
 	private $iCacheLifetime = 600;
 	private $iTimeout = 10;
 	
-	public function setXMLHttpRequestOnly($bXMLHttpRequestOnly) {
-		$this->bXMLHttpRequestOnly = (bool)$bXMLHttpRequestOnly;
+	public function setXmlHttpRequestOnly($bXmlHttpRequestOnly) {
+		$this->bXmlHttpRequestOnly = (bool)$bXmlHttpRequestOnly;
 	}
 	
 	public function setCacheLifetime($iCacheLifetime) {
@@ -41,7 +41,7 @@ class SteamProfileXMLProxyApp {
 	public function run() {
 		try {
 			// response to XMLHttpRequest only
-			if($this->bXMLHttpRequestOnly && (
+			if($this->bXmlHttpRequestOnly && (
 				!isset($_SERVER['HTTP_X_REQUESTED_WITH']) ||
 				$_SERVER['HTTP_X_REQUESTED_WITH'] != 'XMLHttpRequest'
 			)) {
@@ -57,7 +57,7 @@ class SteamProfileXMLProxyApp {
 			}
 			
 			$SteamID = new SteamID($sID);
-			$sXMLUrl = 'http://steamcommunity.com/';
+			$sXmlUrl = 'http://steamcommunity.com/';
 
 			// choose if we got a numeric id or an alias
 			if(!$SteamID->isValid()) {
@@ -66,68 +66,39 @@ class SteamProfileXMLProxyApp {
 					throw new RuntimeException("Invalid profile alias");
 				}
 				
-				$sXMLUrl .= 'id/'.$sID;
+				$sXmlUrl .= 'id/'.$sID;
 			} else {
-				$sXMLUrl .= 'profiles/'.$SteamID->getSteamComID();
+				$sXmlUrl .= 'profiles/'.$SteamID->getSteamComID();
 			}
 
 			// add xml parameter so we get xml data (hopefully)
-			$sXMLUrl .= '?xml=1';
+			$sXmlUrl .= '?xml=1';
 			
-			//exit($SteamID->getSteamComID().' - '.$sXMLUrl);
-
 			$Cache = new CacheManager('xml', $this->iCacheLifetime, 'xml');
-			$CacheEntry = $Cache->getEntry($sXMLUrl);
+			$CacheEntry = $Cache->getEntry($sXmlUrl);
 
 			// do we have a cached version of the xml document?
 			if(!$CacheEntry->isCached()) {
 				try {
 					// start the downloader
-					$cURL = new SteamProfileDownloader($sXMLUrl, self::VERSION);
-					$cURL->setReturnTransfer(true);
-					$cURL->setTimeout($this->iTimeout);
-					$sXMLDoc = '';
+					$Downloader = new SteamProfileDownloader($sXmlUrl, 'SteamProfile/'.self::VERSION);
+					$Downloader->setTimeout($this->iTimeout);
+					$Downloader->setTrimExtra(true);
+					
+					$sXml = '';
 					
 					try {
-						$sXMLDoc = $cURL->start();
-						
-						// false means cURL failed
-						if($sXMLDoc === false) {
-							throw new RuntimeException('Proxy error: '.$cURL->getErrorMessage());
-						}
-						
-						// anything else than status code 2xx is most likely bad
-						$iHTTPCode = $cURL->getHTTPCode();
-						if($iHTTPCode < 200 && $iHTTPCode > 299) {
-							throw new RuntimeException('Steam Community server error ('.$cURL->getHTTPCode().')');
-						}
+						$sXml = $Downloader->start();
 					} catch(Exception $e) {
-						$cURL->close();
+						$Downloader->close();
 						throw $e;
 					}
 					
 					// close cURL handle
-					$cURL->close();
-					
-					// check if the downloader actually downloaded anything
-					if(strlen($sXMLDoc) == 0) {
-						throw new RuntimeException('Steam Community server error');
-					}
-					
-					// remove certain control characters that are misleadingly send by the API,
-					// which are invalid in XML 1.0
-					$aCtlChr = array();
-
-					for($i = 0; $i < 32; $i++) {
-						// tab, lf and cr are allowed
-						if($i == 9 || $i == 10 || $i == 13) continue;
-						$aCtlChr[] = chr($i);
-					}
-
-					$sXMLDoc = str_replace($aCtlChr, '', $sXMLDoc);
+					$Downloader->close();
 					
 					// save document to cache
-					$CacheEntry->saveString($sXMLDoc);
+					$CacheEntry->saveString($sXml);
 				} catch(Exception $e) {
 					// downloading failed, but maybe we can redirect to the old file
 					if(!$CacheEntry->isStored()) {

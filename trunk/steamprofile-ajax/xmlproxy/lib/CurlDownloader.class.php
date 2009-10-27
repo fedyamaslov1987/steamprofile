@@ -19,7 +19,7 @@
  *	along with SteamProfile.  If not, see <http://www.gnu.org/licenses/>.
  */
  
-class CURLDownloader {
+class CurlDownloader {
 	private $cURLSession;
 	private $rOutputFile;
 
@@ -60,7 +60,7 @@ class CURLDownloader {
 		$this->setOption(CURLOPT_CONNECTTIMEOUT, $iTimeout);
 	}
 
-	public function getHTTPCode() {
+	public function getHttpCode() {
 		return $this->getInfo(CURLINFO_HTTP_CODE);
 	}
 

@@ -19,11 +19,16 @@
  *	along with SteamProfile.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-class SteamProfileDownloader extends CURLDownloader {
-	public function __construct($sURL, $sVersion) {
-		parent::__construct($sURL);
+class SteamProfileDownloader extends CurlDownloader {
+	private $bTrimExtra = false;
+	private $bFilterCtlChars = true;
+
+	public function __construct($sUrl, $sAppId) {
+		parent::__construct($sUrl);
+		
 		$aCURLVersion = curl_version();
-		$this->setUserAgent('SteamProfile/'.$sVersion.' (PHP '.PHP_VERSION.'; cURL '.$aCURLVersion['version'].')');
+		$this->setUserAgent($sAppId.' (PHP '.PHP_VERSION.'; cURL '.$aCURLVersion['version'].')');
+		$this->setReturnTransfer(true); // required for filtering and optimizing
 		
 		// setting CURLOPT_FOLLOWLOCATION in safe_mode will raise a warning
 		if(ini_get('safe_mode') == 'Off' || ini_get('safe_mode') === 0) {
@@ -31,5 +36,70 @@ class SteamProfileDownloader extends CURLDownloader {
 			$this->setOption(CURLOPT_MAXREDIRS, 3);
 		}
 	}
+	
+	public function setTrimExtra($bTrimExtra) {
+		$this->bTrimExtra = $bTrimExtra;
+	}
+	
+	public function isTrimExtra() {
+		return $this->bTrimExtra;
+	}
+	
+	public function setFilterCtlChars($bFilterCtlChars) {
+		$this->bFilterCtlChars = $bFilterCtlChars;
+	}
+	
+	public function isFilterCtlChars() {
+		return $this->bFilterCtlChars;
+	}
+	
+	public function start() {
+		$sXml = parent::start();
+		
+		// false means cURL failed
+		if($sXml === false) {
+			throw new SteamProfileDownloader('cURL error ('.$this->getErrorMessage().')');
+		}
+		
+		// anything else than status code 2xx is most likely bad
+		$iHttpCode = $this->getHTTPCode();
+		if($iHttpCode < 200 && $iHttpCode > 299) {
+			throw new SteamProfileDownloader("Steam Community server error ($iHttpCode)");
+		}
+	
+		// check if the we actually downloaded anything
+		if(strlen($sXml) == 0) {
+			throw new SteamProfileDownloader('Steam Community server error');
+		}
+		
+		// trim extra profile data (groups, friends, most played games)
+		if($this->bTrimExtra) {
+			$sEndToken = '</summary>';
+			$iEndPos = strpos($sXml, $sEndToken);
+
+			if($iEndPos !== false) {
+				$sXml = substr($sXml, 0, $iEndPos + strlen($sEndToken));
+				$sXml.= "\n</profile>";
+			}
+		}
+		
+		// remove certain control characters that are misleadingly send by the API,
+		// which are invalid in XML 1.0
+		if($this->bFilterCtlChars) {
+			$aCtlChr = array();
+
+			for($i = 0; $i < 32; $i++) {
+				// tab, lf and cr are allowed
+				if($i == 9 || $i == 10 || $i == 13) continue;
+				$aCtlChr[] = chr($i);
+			}
+
+			$sXml = str_replace($aCtlChr, '', $sXml);
+		}
+		
+		return $sXml;
+	}
 }
+
+class SteamProfileDownloader extends Exception {}
 ?>

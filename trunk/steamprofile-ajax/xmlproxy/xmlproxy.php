@@ -36,8 +36,8 @@ require_once 'lib/Classpath.class.php';
 Classpath::add('lib');
 
 // start application
-$App = new SteamProfileXMLProxyApp();
-$App->setXMLHttpRequestOnly($bXMLHttpRequestOnly);
+$App = new SteamProfileXmlProxyApp();
+$App->setXmlHttpRequestOnly($bXMLHttpRequestOnly);
 $App->setCacheLifetime($iCacheLifetime);
 $App->setTimeout($iTimeout);
 $App->run();
