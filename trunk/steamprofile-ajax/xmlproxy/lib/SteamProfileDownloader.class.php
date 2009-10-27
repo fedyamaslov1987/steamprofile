@@ -101,5 +101,5 @@ class SteamProfileDownloader extends CurlDownloader {
 	}
 }
 
-class SteamProfileDownloader extends Exception {}
+class SteamProfileDownloaderException extends Exception {}
 ?>
