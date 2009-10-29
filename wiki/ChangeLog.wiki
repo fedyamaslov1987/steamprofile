@@ -3,6 +3,15 @@
 
 = SteamProfile Ajax =
 
+== 2.0 Final ==
+ * Added banner to the background of the currently played game (can be turned off in steamprofile.xml)
+ * Added XML trimming to discard XML data that is currently not used by SteamProfile (saves several kilobytes for some profiles)
+ * Added comments in the steamprofile.xml
+ * Optimized PNG images (smaller file size and no more gamma problems with Internet Exporer)
+ * The slider menu can now turned off in the steamprofile.xml
+ * Removed "Join Game" icon for single-player games
+ * Some small CSS and HTML improvements
+
 == 2.0 Beta 6 ==
  * Added a XML filter for control characters that are misleadingly send by the Steam Community API to avoid "Invalid community data"-errors for non-IE browsers
  * Stylesheet link tags in the header are no longer required
