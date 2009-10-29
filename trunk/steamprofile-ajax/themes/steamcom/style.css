@@ -9,12 +9,29 @@
 	position: relative;
 	width: 246px;
 	height: 48px;
-	background-color: #3A3A3A;
+	background: #3A3A3A url(bg.png);
 	overflow: hidden;
 	margin: 4px;
 }
 
-.steamprofile > div {
+.steamprofile .sp-bg-game,
+.steamprofile .sp-bg-fade {
+	background-position: right center;
+	height: 48px;
+}
+
+.steamprofile .sp-bg-fade {
+	background-repeat: repeat-y;
+	background-image: url(fade.png);
+}
+
+.steamprofile .sp-bg-game {
+	background-repeat: no-repeat;
+}
+
+.steamprofile .sp-badge,
+.steamprofile .sp-loading,
+.steamprofile .sp-error {
 	padding: 4px;
 }
 
@@ -38,13 +55,14 @@
 }
 
 .steamprofile .sp-error {
-	color: #ff4444;
+	color: #cc4444;
 	font-size: 12px;
 	margin: 4px;
 }
 
 .steamprofile .sp-error img {
 	vertical-align: middle;
+	margin-right: 4px;
 }
 
 .steamprofile:hover {
@@ -67,7 +85,7 @@
 }
 
 .steamprofile .sp-in-game .sp-avatar {
-	background-image: url(images/iconholder_ingame.png);
+	background-image: url(iconholder_ingame.png);
 }
 
 .steamprofile .sp-in-game {
@@ -79,7 +97,7 @@
 }
 
 .steamprofile .sp-online .sp-avatar {
-	background-image: url(images/iconholder_online.png);
+	background-image: url(iconholder_online.png);
 }
 
 .steamprofile .sp-online {
@@ -91,7 +109,7 @@
 }
 
 .steamprofile .sp-offline .sp-avatar {
-	background-image: url(images/iconholder_offline.png);
+	background-image: url(iconholder_offline.png);
 }
 
 .steamprofile .sp-offline .sp-info,
@@ -117,7 +135,7 @@
 	z-index: 2;
 	left: -16px;
 	top: -1px;
-	background: url(images/handle.png) right center no-repeat;
+	background: url(handle.png) right center no-repeat;
 }
 
 .steamprofile .sp-handle:hover {

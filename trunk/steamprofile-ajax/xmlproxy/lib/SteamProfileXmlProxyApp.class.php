@@ -81,7 +81,7 @@ class SteamProfileXmlProxyApp {
 			if(!$CacheEntry->isCached()) {
 				try {
 					// start the downloader
-					$Downloader = new SteamProfileDownloader($sXmlUrl, 'SteamProfile/'.self::VERSION);
+					$Downloader = new SteamProfileDownloader($sXmlUrl, 'SteamProfileAjax/'.self::VERSION);
 					$Downloader->setTimeout($this->iTimeout);
 					$Downloader->setTrimExtra(true);
 					

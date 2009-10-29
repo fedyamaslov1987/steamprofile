@@ -18,6 +18,18 @@
  *	along with SteamProfile.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+jQuery.fn.attrAppend = function(name, value) {
+	var elem;
+	return this.each(function(){
+		elem = $(this);
+		
+		// append attribute only if extisting and not empty
+		if(elem.attr(name) != undefined && elem.attr(name) != "") {
+			elem.attr(name, value + elem.attr(name));
+		}
+	});
+};
+ 
 $(document).ready(function() {
 	SteamProfile = new SteamProfile();
 	SteamProfile.init();
@@ -26,6 +38,7 @@ $(document).ready(function() {
 function SteamProfile() {
 	var basePath;
 	var themePath;
+	var showGameBanner;
 	var profiles = new Array();
 	var profileCache = new Object();
 	var loadLock = false;
@@ -126,9 +139,20 @@ function SteamProfile() {
 		return basePath + 'xmlproxy/xmlproxy.php?id=' + escape(profileID);
 	}
 	
+	function getConfigString(name) {
+		return configData.find('vars > var[name="' + name + '"]').text();
+	}
+	
+	function getConfigBool(name) {
+		return getConfigString(name).toLowerCase() == 'true';
+	}
+	
 	function loadConfig() {
+		// set game banner switch
+		showGameBanner = getConfigBool('gamebanner');
+	
 		// set theme stylesheet
-		themePath = basePath + 'themes/' + configData.find('theme').text() + '/';
+		themePath = basePath + 'themes/' + getConfigString('theme') + '/';
 		$('head').append('<link rel="stylesheet" type="text/css" href="' + themePath + 'style.css">');
 		
 		// load templates
@@ -136,8 +160,10 @@ function SteamProfile() {
 		loadingTpl = $(configData.find('templates > loading').text());
 		errorTpl   = $(configData.find('templates > error').text());
 		
-		// set loading image
-		loadingTpl.find('img').attr('src', themePath + 'images/loading.gif');
+		// add theme path to image src
+		profileTpl.find('img').attrAppend('src', themePath);
+		loadingTpl.find('img').attrAppend('src', themePath);
+		errorTpl.find('img').attrAppend('src', themePath);
 		
 		// we can now unlock the refreshing function
 		configLoaded = true;
@@ -193,7 +219,7 @@ function SteamProfile() {
 				var onlineState = profileData.find('profile > onlineState').text();
 				
 				// set state class, avatar image and name
-				profile.addClass('sp-' + onlineState);
+				profile.find('.sp-badge').addClass('sp-' + onlineState);
 				profile.find('.sp-avatar img').attr('src', profileData.find('profile > avatarIcon').text());
 				profile.find('.sp-info a').append(profileData.find('profile > steamID').text());
 				
@@ -204,17 +230,19 @@ function SteamProfile() {
 					profile.find('.sp-info').append(profileData.find('profile > stateMessage').text());
 				}
 				
-				// add icons
-				profile.find('.sp-addfriend img').attr('src', themePath + 'images/icon_add_friend.png');
-				profile.find('.sp-viewitems img').attr('src', themePath + 'images/icon_view_items.png');
-
-				if (onlineState == 'in-game') {
-					// add 'Join Game' link href
-					profile.find('.sp-joingame')
-						.attr('href', profileData.find('profile > inGameInfo > gameJoinLink').text())
-						.find('img').attr('src', themePath + 'images/icon_join_game.png');
+				// set game background
+				if (showGameBanner && profileData.find('profile > inGameInfo > gameLogoSmall').length != 0) {
+					profile.css('background-image', 'url(' + profileData.find('profile > inGameInfo > gameLogoSmall').text() + ')');
 				} else {
-					// the user is not ingame, remove 'Join Game' link
+					profile.removeClass('sp-bg-game');
+					profile.find('.sp-bg-fade').removeClass('sp-bg-fade');
+				}
+				
+				if (profileData.find('profile > inGameInfo > gameJoinLink').length != 0) {
+					// add 'Join Game' link href
+					profile.find('.sp-joingame').attr('href', profileData.find('profile > inGameInfo > gameJoinLink').text());
+				} else {
+					// the user is not in a multiplayer game, remove 'Join Game' link
 					profile.find('.sp-joingame').remove();
 				}
 				
@@ -252,9 +280,7 @@ function SteamProfile() {
 
 	function createError(message) {
 		var errorTmp = errorTpl.clone();
-		errorTmp.find('.sp-error')
-			.append(message)
-			.find('img').attr('src', themePath + 'images/cross.png');
+		errorTmp.append(message);	
 		return errorTmp;
 	}
 };

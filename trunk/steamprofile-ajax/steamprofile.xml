@@ -1,10 +1,18 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <steamprofile-config>
-	<theme>steamcom</theme>
+	<vars>
+		<!-- The Theme used by SteamProfile. Must be the name of a folder inside the "themes/" folder. -->
+		<var name="theme">steamcom</var>
+		<!-- If set to true, the banner of the currenty played game will be shown in the badge background. -->
+		<var name="gamebanner">true</var>
+	</vars>
+	<!-- The HTML templates for DOM manipulation. Change only if you know what you're doing. -->
 	<templates>
 		<profile>
 		<![CDATA[
-			<div>
+			<div class="sp-bg-game">
+			<div class="sp-bg-fade">
+			<div class="sp-badge">
 				<div class="sp-avatar">
 					<a target="_blank" href="">
 						<img src="" width="32" height="32" alt="" />
@@ -16,30 +24,28 @@
 				<div class="sp-extra">
 					<div class="sp-handle"></div>
 					<div class="sp-content">
-						<a class="sp-joingame" title="Join Game" href=""><img src="" width="16" height="16" alt="" /></a>
-						<a class="sp-addfriend" title="Add to Friends" href=""><img src="" width="16" height="16" alt="" /></a>
-						<a class="sp-viewitems" title="View Items" href="" target="_blank"><img src="" width="16" height="16" alt="" /></a>
+						<a class="sp-joingame" title="Join Game" href=""><img src="icon_join_game.png" width="16" height="16" alt="" /></a>
+						<a class="sp-addfriend" title="Add to Friends" href=""><img src="icon_add_friend.png" width="16" height="16" alt="" /></a>
+						<a class="sp-viewitems" title="View Items" href="" target="_blank"><img src="icon_view_items.png" width="16" height="16" alt="" /></a>
 					</div>
 				</div>
+			</div>
+			</div>
 			</div>
 		]]>
 		</profile>
 		<loading>
 		<![CDATA[
-			<div>
-				<div class="sp-loading">
-					<img src="" width="32" height="32" alt="" />
-					Loading...
-				</div>
+			<div class="sp-loading">
+				<img src="loading.gif" width="32" height="32" alt="" />
+				Loading...
 			</div>
 		]]>
 		</loading>
 		<error>
 		<![CDATA[
-			<div>
-				<div class="sp-error">
-					<img src="" width="16" height="16" alt="Error" />
-				</div>
+			<div class="sp-error">
+				<img src="error.png" width="16" height="16" alt="Error" />
 			</div>
 		]]>
 		</error>
