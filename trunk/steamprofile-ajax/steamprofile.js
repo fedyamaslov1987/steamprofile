@@ -137,7 +137,7 @@ function SteamProfile() {
 	}
 	
 	function getXMLProxyURL(profileID) {
-		return basePath + 'xmlproxy/?id=' + escape(profileID);
+		return basePath + 'xmlproxy/xmlproxy.php?id=' + escape(profileID);
 	}
 	
 	function getConfigString(name) {
