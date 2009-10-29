@@ -39,6 +39,7 @@ function SteamProfile() {
 	var basePath;
 	var themePath;
 	var showGameBanner;
+	var showSliderMenu;
 	var profiles = new Array();
 	var profileCache = new Object();
 	var loadLock = false;
@@ -136,7 +137,7 @@ function SteamProfile() {
 	}
 	
 	function getXMLProxyURL(profileID) {
-		return basePath + 'xmlproxy/xmlproxy.php?id=' + escape(profileID);
+		return basePath + 'xmlproxy/?id=' + escape(profileID);
 	}
 	
 	function getConfigString(name) {
@@ -148,7 +149,7 @@ function SteamProfile() {
 	}
 	
 	function loadConfig() {
-		// set game banner switch
+		showSliderMenu = getConfigBool('slidermenu');
 		showGameBanner = getConfigBool('gamebanner');
 	
 		// set theme stylesheet
@@ -238,27 +239,31 @@ function SteamProfile() {
 					profile.find('.sp-bg-fade').removeClass('sp-bg-fade');
 				}
 				
-				if (profileData.find('profile > inGameInfo > gameJoinLink').length != 0) {
-					// add 'Join Game' link href
-					profile.find('.sp-joingame').attr('href', profileData.find('profile > inGameInfo > gameJoinLink').text());
+				if(showSliderMenu) {
+					if (profileData.find('profile > inGameInfo > gameJoinLink').length != 0) {
+						// add 'Join Game' link href
+						profile.find('.sp-joingame').attr('href', profileData.find('profile > inGameInfo > gameJoinLink').text());
+					} else {
+						// the user is not in a multiplayer game, remove 'Join Game' link
+						profile.find('.sp-joingame').remove();
+					}
+				
+					// add 'View Items' link href
+					profile.find('.sp-viewitems')
+						.attr('href', 'http://tf2items.com/profiles/' + profileData.find('profile > steamID64').text());
+					
+					// // add 'Add Friend' link href
+					profile.find('.sp-addfriend')
+						.attr('href', 'steam://friends/add/' + profileData.find('profile > steamID64').text());
+					
+					// add other link hrefs
+					profile.find('.sp-avatar a, .sp-info a')
+						.attr('href', 'http://steamcommunity.com/profiles/' + profileData.find('profile > steamID64').text());
+					
+					createEvents(profile);
 				} else {
-					// the user is not in a multiplayer game, remove 'Join Game' link
-					profile.find('.sp-joingame').remove();
+					profile.find('.sp-extra').remove();
 				}
-				
-				// add 'View Items' link href
-				profile.find('.sp-viewitems')
-					.attr('href', 'http://tf2items.com/profiles/' + profileData.find('profile > steamID64').text());
-				
-				// // add 'Add Friend' link href
-				profile.find('.sp-addfriend')
-					.attr('href', 'steam://friends/add/' + profileData.find('profile > steamID64').text());
-				
-				// add other link hrefs
-				profile.find('.sp-avatar a, .sp-info a')
-					.attr('href', 'http://steamcommunity.com/profiles/' + profileData.find('profile > steamID64').text());
-				
-				createEvents(profile);
 			}
 			
 			return profile;

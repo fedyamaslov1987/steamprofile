@@ -20,7 +20,7 @@
  */
 
 class SteamProfileXmlProxyApp {
-	const VERSION = '2.0b6';
+	const VERSION = '1.0';
 	
 	private $bXmlHttpRequestOnly = true;
 	private $iCacheLifetime = 600;
@@ -81,7 +81,7 @@ class SteamProfileXmlProxyApp {
 			if(!$CacheEntry->isCached()) {
 				try {
 					// start the downloader
-					$Downloader = new SteamProfileDownloader($sXmlUrl, 'SteamProfileAjax/'.self::VERSION);
+					$Downloader = new SteamProfileDownloader($sXmlUrl, 'SteamProfileXMLProxy/'.self::VERSION);
 					$Downloader->setTimeout($this->iTimeout);
 					$Downloader->setTrimExtra(true);
 					
