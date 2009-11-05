@@ -1,1 +1,1 @@
-../../../steamprofile-common/lib/SteamProfileDownloader.class.php
+../../../common/lib/SteamProfileDownloader.class.php

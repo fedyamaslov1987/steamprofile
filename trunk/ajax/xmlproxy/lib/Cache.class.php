@@ -1,1 +1,1 @@
-../../../steamprofile-common/lib/Cache.class.php
+../../../common/lib/Cache.class.php

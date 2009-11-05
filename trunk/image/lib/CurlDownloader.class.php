@@ -1,1 +1,1 @@
-../../steamprofile-common/lib/CurlDownloader.class.php
+../../common/lib/CurlDownloader.class.php

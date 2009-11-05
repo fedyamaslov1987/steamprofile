@@ -1,1 +1,1 @@
-../../steamprofile-common/lib/Config.class.php
+../../common/lib/Config.class.php
