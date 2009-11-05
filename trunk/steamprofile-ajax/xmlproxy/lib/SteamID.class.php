@@ -1,1 +1,1 @@
-../../../../share/lib/SteamID.class.php
+../../../steamprofile-common/lib/SteamID.class.php

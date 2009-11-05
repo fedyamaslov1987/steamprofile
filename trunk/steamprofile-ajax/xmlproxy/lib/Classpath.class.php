@@ -1,1 +1,1 @@
-../../../../share/lib/Classpath.class.php
+../../../steamprofile-common/lib/Classpath.class.php
