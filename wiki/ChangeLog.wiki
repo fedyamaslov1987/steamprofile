@@ -3,6 +3,12 @@
 
 = SteamProfile Ajax =
 
+== 2.0.1 ==
+ * Changed config file format to "cfg" (INI file format)
+ * Renamed "steamcom" theme to "default"
+ * Fixed wrong community server error detection
+ * Fixed faulty exceptions
+
 == 2.0 Final ==
  * Added banner to the background of the currently played game (can be turned off in steamprofile.xml)
  * Added XML trimming to discard XML data that is currently not used by SteamProfile (saves several kilobytes for some profiles)
