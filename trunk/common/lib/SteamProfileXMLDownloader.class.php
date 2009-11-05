@@ -49,7 +49,7 @@ class SteamProfileXMLDownloader extends SteamProfileDownloader {
 		
 		// check if the we actually downloaded anything
 		if(strlen($content) == 0) {
-			throw new SteamProfileDownloader('Empty Steam Community data');
+			throw new Exception('Empty Steam Community data');
 		}
 		
 		// trim extra profile data (groups, friends, most played games)

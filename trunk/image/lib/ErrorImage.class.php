@@ -23,7 +23,7 @@ class ErrorImage extends GDImage {
     public function __construct($sMessage) {
 		$sMessage = wordwrap(strip_tags($sMessage), 40, "\n", true);
 		
-		parent::create(254, 48);
+		parent::create(246, 48);
 	
         $iFontColor = $this->getColor(255, 0, 0);
         $iBorderColor = $this->getColor(255, 0, 0);

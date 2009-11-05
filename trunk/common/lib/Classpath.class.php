@@ -42,11 +42,11 @@ class Classpath {
 
 function __autoload($sClassName) {
 	$aPaths = Classpath::getPaths();
-	$sClassFile = $sClassName.'.class.php';
 
 	foreach($aPaths as $sPath) {
-		if(file_exists($sPath.DIRECTORY_SEPARATOR.$sClassFile)) {
-			require_once $sPath.DIRECTORY_SEPARATOR.$sClassFile;
+		$sPath .= "/$sClassName.class.php";
+		if(file_exists($sPath)) {
+			require_once $sPath;
 		}
 	}
 }
