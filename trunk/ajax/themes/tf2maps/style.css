@@ -23,7 +23,7 @@
 
 .steamprofile .sp-bg-fade {
 	background-repeat: repeat-y;
-	background-image: url(fade.png);
+	background-image: url(background_fade.png);
 }
 
 .steamprofile .sp-bg-game {
@@ -124,7 +124,7 @@
 	z-index: 1;
 	right: 0;
 	top: 0;
-	background: url(bg.png);
+	background: url(background.png);
 	height: 50px;
 }
 

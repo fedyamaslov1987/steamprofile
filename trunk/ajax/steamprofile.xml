@@ -2,7 +2,7 @@
 <steamprofile-config>
 	<vars>
 		<!-- The Theme used by SteamProfile. Must be the name of a folder inside the "themes/" folder. -->
-		<var name="theme">steamcom</var>
+		<var name="theme">default</var>
 		<!-- If set to true, the slider menu with icon links will be shown. -->
 		<var name="slidermenu">true</var>
 		<!-- If set to true, the banner of the currenty played game will be shown in the badge background. -->

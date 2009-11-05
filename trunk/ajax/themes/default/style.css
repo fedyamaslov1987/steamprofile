@@ -9,7 +9,7 @@
 	position: relative;
 	width: 246px;
 	height: 48px;
-	background: #3A3A3A url(bg.png);
+	background: #3A3A3A url(background.png);
 	overflow: hidden;
 	margin: 4px;
 }
@@ -22,7 +22,7 @@
 
 .steamprofile .sp-bg-fade {
 	background-repeat: repeat-y;
-	background-image: url(fade.png);
+	background-image: url(background_fade.png);
 }
 
 .steamprofile .sp-bg-game {
