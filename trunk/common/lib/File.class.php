@@ -78,15 +78,15 @@ class File {
 		return is_dir($this->sPathName);
 	}
 	
-	public function readToStdOut() {
+	public function readStdOut() {
 		return readfile($this->sPathName);
 	}
 	
-	public function loadString() {
+	public function readString() {
 		return file_get_contents($this->sPathName);
 	}
 	
-	public function saveString($sContent) {
+	public function writeString($sContent) {
 		return file_put_contents($this->sPathName, $sContent);
 	}
 

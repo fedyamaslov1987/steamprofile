@@ -252,7 +252,7 @@ function SteamProfile() {
 					profile.find('.sp-viewitems')
 						.attr('href', 'http://tf2items.com/profiles/' + profileData.find('profile > steamID64').text());
 					
-					// // add 'Add Friend' link href
+					// add 'Add Friend' link href
 					profile.find('.sp-addfriend')
 						.attr('href', 'steam://friends/add/' + profileData.find('profile > steamID64').text());
 					

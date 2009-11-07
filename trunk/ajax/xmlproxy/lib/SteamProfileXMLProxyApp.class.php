@@ -30,12 +30,11 @@ class SteamProfileXMLProxyApp {
 			$bXMLHttpRequestOnly = $Config->getBoolean('proxy.check_header', true);
 			$iDownloaderTimeout	= $Config->getInteger('downloader.timeout', 10);
 			
+			$Headers = HTTPHeaders::getInstance();
+			
 			// response to XMLHttpRequest only
-			if($bXMLHttpRequestOnly && (
-				!isset($_SERVER['HTTP_X_REQUESTED_WITH']) ||
-				$_SERVER['HTTP_X_REQUESTED_WITH'] != 'XMLHttpRequest'
-			)) {
-				header('HTTP/1.1 204 No Content');
+			if($bXMLHttpRequestOnly && $Headers->getRequest('X-Requested-With') == 'XMLHttpRequest') {
+				$Headers->setResponseCode(204);
 				return;
 			}
 		
@@ -89,9 +88,11 @@ class SteamProfileXMLProxyApp {
 					
 					// close cURL handle
 					$Downloader->close();
-					
 					// save document to cache
-					$XmlFile->saveString($sXml);
+					$XmlFile->writeString($sXml);
+					// clear stat cache to ensure that the rest of the
+					// script will notice the file modification
+					clearstatcache();
 				} catch(Exception $e) {
 					// downloading failed, but maybe we can redirect to the old file
 					if(!$XmlFile->exists()) {
@@ -101,14 +102,18 @@ class SteamProfileXMLProxyApp {
 				}
 			}
 			
-			// redirect to xml file
-			$sHost = $_SERVER['HTTP_HOST'];
-			$sUri = dirname($_SERVER['PHP_SELF']);
-			$sFile = basename($XmlFile->getPath());
-			header("Location: http://$sHost$sUri/$sCacheDir/$sFile");
+			// use client cache, if possible
+			if(!$Headers->isModifiedSince($XmlFile->lastModified())) {
+				$Headers->setResponseCode(304);
+				return;
+			} else {
+				$Headers->setResponse('Content-Type', 'application/xml');
+				$XmlFile->readStdOut();
+			}
 		} catch(Exception $e) {
-			// set content-type header
-			header('Content-Type: text/xml', true);
+			$Headers = HTTPHeaders::getInstance();
+			$Headers->setResponse('Content-Type', 'application/xml');
+
 			echo '<?xml version="1.0" encoding="UTF-8" standalone="yes"?>';
 			echo '<response><error><![CDATA['.$e->getMessage().']]></error></response>';
 		}

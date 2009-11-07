@@ -21,12 +21,15 @@
 
 class SteamProfileImageApp {
 	public function run() {
-		try {		
+		// set to false in productive environments
+		$bDebug = true;
+	
+		try {
 			// get selected id
 			if(isset($_GET['id']) && !empty($_GET['id'])) {
 				$sID = $_GET['id'];
 			} else {
-				throw new Exception('No Steam-ID or Community-ID specified!');
+				throw new Exception('No Steam-ID or Community-ID submitted');
 			}
 			
 			$SteamID = new SteamID($sID);
@@ -36,7 +39,7 @@ class SteamProfileImageApp {
 			if(!$SteamID->isValid()) {
 				// complain about invalid characters, if found
 				if(!preg_match('/^[a-zA-Z0-9-_]+$/', $sID)) {
-					throw new RuntimeException("Invalid profile alias: $sID");
+					throw new Exception("Invalid profile alias: $sID");
 				}
 				
 				$sXmlUrl .= 'id/'.$sID;
@@ -46,12 +49,11 @@ class SteamProfileImageApp {
 
 			// add xml parameter so we get xml data (hopefully)
 			$sXmlUrl .= '?xml=1';
-			
+		
 			// load config
 			$Config = Config::load('image.cfg');
 			
 			$bImageFallback = $Config->getString('image.fallback', true);
-			$bImageRedirect = $Config->getString('image.redirect', true);
 			$sDefaultTheme = $Config->getString('theme.default', 'default');
 			$iCacheLifetime = $Config->getInteger('cache.lifetime', 600);
 			$sCacheDirProfiles = $Config->getString('cache.dir.profiles', 'cache/profiles');
@@ -68,19 +70,24 @@ class SteamProfileImageApp {
 					$ProfileImage->createProfile($sXmlUrl, $sTheme);
 					// save it to cache
 					$ProfileImage->toPNG($ImageFile->getPath());
+					// clear stat cache to ensure that the rest of the
+					// script will notice the file modification
+					clearstatcache();
 				}
 				
-				$this->displayImage($ImageFile, $bImageRedirect);
+				$this->displayImage($ImageFile);
 			} catch(SteamProfileImageException $e) {
-				if(isset($_GET['debug'])) {
+				// on debug mode, re-throw
+				if($bDebug) {
 					throw $e->getPrevious();
 				}
+				
 				// an exception was thrown in SteamProfileImage,
 				// but a themed error image could have been generated
 				try {
 					// try a fallback to the cached image first
 					if($bImageFallback && $ImageFile->exists()) {
-						$this->displayImage($ImageFile, $bImageRedirect);
+						$this->displayImage($ImageFile);
 					} else {
 						// try to display the error image
 						$ProfileImage->toPNG();
@@ -90,19 +97,25 @@ class SteamProfileImageApp {
 					throw $e->getPrevious();
 				}
 			} catch(Exception $e) {
+				// on debug mode, re-throw
+				if($bDebug) {
+					throw $e->getPrevious();
+				}
+			
 				// an exception was thrown in SteamProfileImage,
 				// but we could try a fallback to the cached image
 				if($bImageFallback && $ImageFile->exists()) {
 					// redirect to cached image file
-					$this->displayImage($ImageFile, $bImageRedirect);
+					$this->displayImage($ImageFile);
 				} else {
 					// nothing cached, re-throw exception
 					throw $e;
 				}
 			}
 		} catch(Exception $e) {
-			if(isset($_GET['debug'])) {
-				header('Content-Type: text/plain');
+			if($bDebug) {
+				$Headers = HTTPHeaders::getInstance();
+				$Headers->setResponse('Content-Type', 'text/plain');
 				echo "$e\n";
 			} else {
 				$ErrorImage = new ErrorImage($e->getMessage());
@@ -111,17 +124,14 @@ class SteamProfileImageApp {
 		}
 	}
 	
-	private function displayImage(File $ImageFile, $bRedirect) {
-		if($bRedirect) {
-			// redirect to cached image file
-			$sFile = $ImageFile->getPath();
-			$sHost = $_SERVER['HTTP_HOST'];
-			$sUri = dirname($_SERVER['PHP_SELF']);
-			header("Location: http://$sHost$sUri/$sFile");
+	private function displayImage(File $ImageFile) {
+		$Headers = HTTPHeaders::getInstance();
+	
+		if(!$Headers->isModifiedSince($ImageFile->lastModified())) {
+			$Headers->setResponseCode(304);
 		} else {
-			// print cached image file
-			header('Content-Type: image/png');
-			$ImageFile->readToStdOut();
+			$Headers->setResponse('Content-Type', 'image/png');
+			$ImageFile->readStdOut();
 		}
 	}
 }
