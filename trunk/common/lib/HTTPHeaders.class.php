@@ -78,7 +78,24 @@ class HTTPHeaders {
 	
 	public function __construct() {
 		if(function_exists('apache_request_headers')) {
-			$this->aRequestHeaders = apache_request_headers();
+			$aRequestHeaders = apache_request_headers();
+			
+			// make sure that all keys have the same case format
+			foreach($aRequestHeaders as $sKey => $sVal) {
+				// split the key on '-'
+				$aWords = explode('-', $sKey);
+				$iWords = count($aWords);
+				
+				// change case: referer -> Referer
+				for($i = 0; $i < $iWords; $i++) {
+					$aWords[$i] = fixKeyCase($aWords[$i]);
+				}
+				
+				// put the key together with '-'
+				$sKey = implode('-', $aWords);
+				
+				$this->aRequestHeaders[$sKey] = $sVal;
+			}
 		} else {
 			foreach($_SERVER as $sKey => $sVal) {
 				// we need the "HTTP_*" keys only
@@ -95,7 +112,7 @@ class HTTPHeaders {
 				
 				// change case: REFERER -> Referer
 				for($i = 0; $i < $iWords; $i++) {
-					$aWords[$i] = ucfirst(strtolower($aWords[$i]));
+					$aWords[$i] = fixKeyCase($aWords[$i]);
 				}
 				
 				// put the key together with '-'
@@ -106,6 +123,10 @@ class HTTPHeaders {
 		}
 		
 		$this->refreshResponseHeaders();
+	}
+	
+	public function fixKeyCase($sKey) {
+		return ucfirst(strtolower($sKey));
 	}
 	
 	public function refreshResponseHeaders() {
@@ -132,6 +153,7 @@ class HTTPHeaders {
 		if(headers_sent()) {
 			return false;
 		} else {
+			$sName = fixKeyCase($sName);
 			if($sValue == null) {
 				header("$sName", $bReplace);
 			} else {
