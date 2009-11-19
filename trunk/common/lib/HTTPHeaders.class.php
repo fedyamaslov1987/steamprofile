@@ -88,7 +88,7 @@ class HTTPHeaders {
 				
 				// change case: referer -> Referer
 				for($i = 0; $i < $iWords; $i++) {
-					$aWords[$i] = fixKeyCase($aWords[$i]);
+					$aWords[$i] = $this->fixKeyCase($aWords[$i]);
 				}
 				
 				// put the key together with '-'
@@ -112,7 +112,7 @@ class HTTPHeaders {
 				
 				// change case: REFERER -> Referer
 				for($i = 0; $i < $iWords; $i++) {
-					$aWords[$i] = fixKeyCase($aWords[$i]);
+					$aWords[$i] = $this->fixKeyCase($aWords[$i]);
 				}
 				
 				// put the key together with '-'
@@ -153,7 +153,7 @@ class HTTPHeaders {
 		if(headers_sent()) {
 			return false;
 		} else {
-			$sName = fixKeyCase($sName);
+			$sName = $this->fixKeyCase($sName);
 			if($sValue == null) {
 				header("$sName", $bReplace);
 			} else {
