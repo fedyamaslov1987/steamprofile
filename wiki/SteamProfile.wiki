@@ -12,14 +12,23 @@ See example.html for examples and instructions for proper embedding into your we
 
 == Server Requirements ==
 
- * A PHP-compliant webserver (tested with Apache/2.2.11)
- * PHP 5.0.0 or higher (tested with PHP/5.2.6-3ubuntu4.2) with cURL support
+ * Any PHP-compliant webserver (tested with Apache/2.2.11)
+ * PHP 5.0.0 or higher, 5.2.x recommended (tested with PHP/5.2.6-3ubuntu4.2)
+
+=== Required PHP extensions ===
+
+ * SteamProfile Ajax
+  * cURL (libcurl 7.x)
+ * SteamProfile Image
+  * cURL (libcurl 7.x)
+  * GD (libgd 2.0.x)
 
 == Client Requirements ==
 
- * Any modern browser
+ * Any modern browser with enabled JavaScript
 
 === Browser Compatibility ===
+
  * *no problems:*
   * Firefox 3.5
   * Opera 10.0
