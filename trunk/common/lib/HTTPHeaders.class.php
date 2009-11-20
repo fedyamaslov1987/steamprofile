@@ -197,7 +197,7 @@ class HTTPHeaders {
 			return true;
 		}
 		
-		if($sModifiedSet == $sModifiedActual) {
+		if($sModifiedSet === $sModifiedActual) {
 			return false;
 		} else {
 			$this->setResponse('Last-Modified', $sModifiedActual);

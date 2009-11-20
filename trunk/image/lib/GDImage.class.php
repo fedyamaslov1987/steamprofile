@@ -19,8 +19,20 @@
  *	along with SteamProfile.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+ /**
+ * Class GDImage
+ *
+ * A basic GD object wrapper
+ */
 class GDImage {
 	protected $rImage;
+	
+	public function __construct() {
+		// make sure the GD extension is loaded
+		if(!extension_loaded('gd') || !function_exists('gd_info')) {
+			throw new RuntimeException('GD extension not loaded');
+		}
+	}
 	
 	public function create($iWidth, $iHeight) {
 		$this->rImage = imagecreatetruecolor($iWidth, $iHeight);

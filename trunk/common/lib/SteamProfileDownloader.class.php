@@ -19,7 +19,7 @@
  *	along with SteamProfile.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-class SteamProfileDownloader extends CurlDownloader {
+class SteamProfileDownloader extends CURL {
 	public function __construct($sUrl, $sVariant) {
 		parent::__construct($sUrl);
 		
@@ -42,9 +42,9 @@ class SteamProfileDownloader extends CurlDownloader {
 		}
 		
 		// anything else than status code 2xx is most likely bad
-		$iHttpCode = $this->getHTTPCode();
-		if($iHttpCode < 200 || $iHttpCode > 299) {
-			throw new Exception("Steam Community server error (HTTP $iHttpCode)");
+		$iHTTPCode = $this->getHTTPCode();
+		if($iHTTPCode < 200 || $iHTTPCode > 299) {
+			throw new Exception("Steam Community server error (HTTP $iHTTPCode)");
 		}
 		
 		return $content;

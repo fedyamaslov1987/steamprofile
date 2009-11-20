@@ -33,7 +33,7 @@ class SteamProfileXMLProxyApp {
 			$Headers = HTTPHeaders::getInstance();
 			
 			// response to XMLHttpRequest only
-			if($bXMLHttpRequestOnly && strtolower($Headers->getRequest('X-Requested-With')) != 'xmlhttprequest') {
+			if($bXMLHttpRequestOnly && $Headers->getRequest('X-Requested-With') != 'XMLHttpRequest') {
 				$Headers->setResponseCode(204);
 				return;
 			}

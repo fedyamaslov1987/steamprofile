@@ -18,12 +18,22 @@
  *	You should have received a copy of the GNU General Public License
  *	along with SteamProfile.  If not, see <http://www.gnu.org/licenses/>.
  */
- 
-class CurlDownloader {
+
+/**
+ * Class CURL
+ *
+ * cURL object wrapper for basic downloading functions
+ */
+class CURL {
 	private $cURLSession;
 	private $rOutputFile;
 
 	public function __construct($sURL) {
+		// make sure the cURL extension is loaded
+		if(!extension_loaded('curl') || !function_exists('curl_init')) {
+			throw new RuntimeException('cURL extension not loaded');
+		}
+	
 		$this->cURLSession = curl_init($sURL);
 	}
 	
@@ -61,7 +71,7 @@ class CurlDownloader {
 		$this->setOption(CURLOPT_CONNECTTIMEOUT, $iTimeout);
 	}
 
-	public function getHttpCode() {
+	public function getHTTPCode() {
 		return $this->getInfo(CURLINFO_HTTP_CODE);
 	}
 
