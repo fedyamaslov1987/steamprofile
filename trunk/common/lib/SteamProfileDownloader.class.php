@@ -24,7 +24,7 @@ class SteamProfileDownloader extends CURL {
 		parent::__construct($sUrl);
 		
 		$aCURLVersion = curl_version();
-		$this->setUserAgent('SteamProfile/2.0.1 ('.$sVariant.'; PHP '.PHP_VERSION.'; cURL '.$aCURLVersion['version'].')');
+		$this->setUserAgent('SteamProfile/2.0.2 ('.$sVariant.'; PHP '.PHP_VERSION.'; cURL '.$aCURLVersion['version'].')');
 		
 		// setting CURLOPT_FOLLOWLOCATION in safe_mode will raise a warning
 		if(ini_get('safe_mode') == 'Off' || ini_get('safe_mode') === 0) {
