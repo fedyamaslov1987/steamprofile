@@ -3,6 +3,11 @@
 
 = SteamProfile Ajax =
 
+== 2.0.2 ==
+ * Improved HTTP handling (direct data output and caching instead of redirecting)
+ * Changed directory structure
+ * Added cURL extension checking
+
 == 2.0.1 ==
  * Changed config file format to "cfg" (INI file format)
  * Renamed "steamcom" theme to "default"
