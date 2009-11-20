@@ -29,4 +29,4 @@ See example.html for examples and instructions for proper embedding into your we
  * *minor problems:*
   * Internet Explorer 7 & Internet Explorer 8 in compatibility mode ("Loading..." is not displayed, icons are not showing up)
  * *major problems:*
-  * Internet Explorer 6 (can't display transparent 24-bit PNG images, slider menu unusable, flawed layout)
+  * Internet Explorer 6 (can't display transparent 32-bit PNG images, slider menu unusable, flawed layout)
