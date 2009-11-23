@@ -114,7 +114,7 @@ class SteamProfileImageApp {
 			}
 		} catch(Exception $e) {
 			if($bDebug) {
-				$Headers = HTTPHeaders::getInstance();
+				$Headers = new HTTPHeaders();
 				$Headers->setResponse('Content-Type', 'text/plain');
 				echo "$e\n";
 			} else {
@@ -125,7 +125,7 @@ class SteamProfileImageApp {
 	}
 	
 	private function displayImage(File $ImageFile) {
-		$Headers = HTTPHeaders::getInstance();
+		$Headers = new HTTPHeaders();
 	
 		if(!$Headers->isModifiedSince($ImageFile->lastModified())) {
 			$Headers->setResponseCode(304);

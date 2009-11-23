@@ -20,10 +20,9 @@
  */
 
 class HTTPHeaders {
-
-	private $aRequestHeaders = array();
-	private $aResponseHeaders = array();
-	private $aResponseCodes = array(
+	private static $aRequestHeaders = array();
+	private static $aResponseHeaders = array();
+	private static $aResponseCodes = array(
 		100 => 'Continue',
 		101 => 'Switching Protocols',
 		200 => 'OK',
@@ -66,35 +65,45 @@ class HTTPHeaders {
 		505 => 'HTTP Version Not Supported'
 	);
 	
-	private static $Instance;
-	
-	public static function getInstance() {
-		if(self::$Instance == null) {
-			self::$Instance = new HTTPHeaders();
+	public function __construct() {
+		if(count(self::$aRequestHeaders) == 0) {
+			$this->refreshRequestHeaders();
 		}
 		
-		return self::$Instance;
+		if(count(self::$aResponseHeaders) == 0) {
+			$this->refreshResponseHeaders();
+		}
 	}
 	
-	public function __construct() {
+	public function formatKey($sKey, $sSeparator) {
+		// split the key
+		$aWords = explode($sSeparator, $sKey);
+		$iWords = count($aWords);
+		
+		// change case: REFERER -> Referer
+		for($i = 0; $i < $iWords; $i++) {
+			$aWords[$i] = $this->fixKeyCase($aWords[$i]);
+		}
+		
+		// put the key together with '-'
+		return implode('-', $aWords);
+	}
+	
+	public function fixKeyCase($sKey) {
+		return ucfirst(strtolower($sKey));
+	}
+	
+	public function refreshRequestHeaders() {
+		// clear old headers
+		self::$aRequestHeaders = array();
+	
 		if(function_exists('apache_request_headers')) {
 			$aRequestHeaders = apache_request_headers();
 			
 			// make sure that all keys have the same case format
 			foreach($aRequestHeaders as $sKey => $sVal) {
-				// split the key on '-'
-				$aWords = explode('-', $sKey);
-				$iWords = count($aWords);
-				
-				// change case: referer -> Referer
-				for($i = 0; $i < $iWords; $i++) {
-					$aWords[$i] = $this->fixKeyCase($aWords[$i]);
-				}
-				
-				// put the key together with '-'
-				$sKey = implode('-', $aWords);
-				
-				$this->aRequestHeaders[$sKey] = $sVal;
+				$sKey = $this->formatKey($sKey, '-');
+				self::$aRequestHeaders[$sKey] = $sVal;
 			}
 		} else {
 			foreach($_SERVER as $sKey => $sVal) {
@@ -102,48 +111,31 @@ class HTTPHeaders {
 				if(substr($sKey, 0, 5) != 'HTTP_') {
 					continue;
 				}
-				
-				// remove 'HTTP_'
-				$sKey = substr($sKey, 5);
-				
-				// split the key on '_'
-				$aWords = explode('_', $sKey);
-				$iWords = count($aWords);
-				
-				// change case: REFERER -> Referer
-				for($i = 0; $i < $iWords; $i++) {
-					$aWords[$i] = $this->fixKeyCase($aWords[$i]);
-				}
-				
-				// put the key together with '-'
-				$sKey = implode('-', $aWords);
-				
-				$this->aRequestHeaders[$sKey] = $sVal;
+
+				$sKey = $this->formatKey(substr($sKey, 5), '_');
+				self::$aRequestHeaders[$sKey] = $sVal;
 			}
 		}
-		
-		$this->refreshResponseHeaders();
-	}
-	
-	public function fixKeyCase($sKey) {
-		return ucfirst(strtolower($sKey));
 	}
 	
 	public function refreshResponseHeaders() {
+		// clear old headers
+		self::$aResponseHeaders = array();
+	
 		if(function_exists('apache_response_headers')) {
-			$this->aResponseHeaders = apache_response_headers();
+			self::$aResponseHeaders = apache_response_headers();
 		} else {
 			$aHeaderList = headers_list();
 			foreach($aHeaderList as $sHeader) {
 				$aHeader = explode(':', $sHeader);
-				$this->aResponseHeaders[$aHeader[0]] = trim($aHeader[1]);
+				self::$aResponseHeaders[$aHeader[0]] = trim($aHeader[1]);
 			}
 		}
 	}
 	
 	public function setResponseCode($iCode) {
-		if(isset($this->aResponseCodes[$iCode])) {
-			return $this->setResponse('HTTP/1.1 '.$iCode.' '.$this->aResponseCodes[$iCode]);
+		if(isset(self::$aResponseCodes[$iCode])) {
+			return $this->setResponse('HTTP/1.1 '.$iCode.' '.self::$aResponseCodes[$iCode]);
 		} else {
 			return false;
 		}
@@ -155,7 +147,7 @@ class HTTPHeaders {
 		} else {
 			$sName = $this->fixKeyCase($sName);
 			if($sValue == null) {
-				header("$sName", $bReplace);
+				header($sName, $bReplace);
 			} else {
 				header("$sName: $sValue", $bReplace);
 			}
@@ -164,11 +156,11 @@ class HTTPHeaders {
 	}
 	
 	public function getResponse($sName) {
-		return isset($this->aResponseHeaders[$sName])? $this->aResponseHeaders[$sName] : null;
+		return isset(self::$aResponseHeaders[$sName])? self::$aResponseHeaders[$sName] : null;
 	}
 	
 	public function getResponseAll() {
-		return $this->aResponseHeaders;
+		return self::$aResponseHeaders;
 	}
 	
 	public function setRedirect($sTarget, $bRelative = true) {
@@ -181,16 +173,16 @@ class HTTPHeaders {
 	}
 	
 	public function getRequest($sName) {
-		return isset($this->aRequestHeaders[$sName])? $this->aRequestHeaders[$sName] : null;
+		return isset(self::$aRequestHeaders[$sName])? self::$aRequestHeaders[$sName] : null;
 	}
 	
 	public function getRequestAll() {
-		return $this->aRequestHeaders;
+		return self::$aRequestHeaders;
 	}
 	
 	public function isModifiedSince($iTime) {
 		$sModifiedSet = $this->getRequest('If-Modified-Since');
-		$sModifiedActual = gmdate("D, d M Y H:i:s \G\M\T", $iTime);
+		$sModifiedActual = gmdate('D, d M Y H:i:s \G\M\T', $iTime);
 		
 		if($sModifiedSet == null) {
 			$this->setResponse('Last-Modified', $sModifiedActual);

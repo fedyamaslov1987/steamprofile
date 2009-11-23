@@ -30,7 +30,7 @@ class SteamProfileXMLProxyApp {
 			$bXMLHttpRequestOnly = $Config->getBoolean('proxy.check_header', true);
 			$iDownloaderTimeout	= $Config->getInteger('downloader.timeout', 10);
 			
-			$Headers = HTTPHeaders::getInstance();
+			$Headers = new HTTPHeaders();
 			
 			// response to XMLHttpRequest only
 			if($bXMLHttpRequestOnly && $Headers->getRequest('X-Requested-With') != 'XMLHttpRequest') {
@@ -111,7 +111,7 @@ class SteamProfileXMLProxyApp {
 				$XmlFile->readStdOut();
 			}
 		} catch(Exception $e) {
-			$Headers = HTTPHeaders::getInstance();
+			$Headers = new HTTPHeaders();
 			$Headers->setResponse('Content-Type', 'application/xml');
 
 			echo '<?xml version="1.0" encoding="UTF-8" standalone="yes"?>';
