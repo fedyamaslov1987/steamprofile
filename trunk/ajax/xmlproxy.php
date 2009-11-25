@@ -18,15 +18,22 @@
  *	You should have received a copy of the GNU General Public License
  *	along with SteamProfile.  If not, see <http://www.gnu.org/licenses/>.
  */
- 
-// throw exceptions for php errors
-function exception_error_handler($errno, $errstr, $errfile, $errline) {
-	throw new ErrorException($errstr, 0, $errno, $errfile, $errline);
-}
-set_error_handler("exception_error_handler");
 
-// set error reporting level
-error_reporting(E_ERROR | E_WARNING | E_PARSE);
+// check for required PHP version 
+define('PHP_VERSION_REQUIRED', '5.0.0');
+
+if(version_compare(PHP_VERSION, PHP_VERSION_REQUIRED, '<')) {
+	$sResponse = sprintf('PHP %s is not supported (required: PHP %s or higher)', PHP_VERSION, PHP_VERSION_REQUIRED);
+	
+	// print XML-formatted error
+	header('Content-Type: application/xml');
+	echo '<?xml version="1.0" encoding="UTF-8" standalone="yes"?>';
+	echo '<response><error><![CDATA['.$sResponse.']]></error></response>';
+	exit();
+}
+
+// load error exception handling
+require_once 'lib/error_exceptions.php';
 
 // load autoincluder
 require_once 'lib/Classpath.class.php';

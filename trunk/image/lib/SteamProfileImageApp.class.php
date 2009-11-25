@@ -29,7 +29,7 @@ class SteamProfileImageApp {
 			if(isset($_GET['id']) && !empty($_GET['id'])) {
 				$sID = $_GET['id'];
 			} else {
-				throw new Exception('No Steam-ID or Community-ID submitted');
+				throw new Exception('No profile ID assigned');
 			}
 			
 			$SteamID = new SteamID($sID);

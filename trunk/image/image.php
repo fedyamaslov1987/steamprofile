@@ -19,15 +19,16 @@
  *	along with SteamProfile.  If not, see <http://www.gnu.org/licenses/>.
  */
  
-// throw exceptions for php errors
-function exception_error_handler($errno, $errstr, $errfile, $errline) {
-	throw new ErrorException($errstr, 0, $errno, $errfile, $errline);
-}
-set_error_handler("exception_error_handler");
+// check for required PHP version 
+define('PHP_VERSION_REQUIRED', '5.0.0');
 
-// set error reporting level
-//error_reporting(E_ERROR | E_WARNING | E_PARSE);
-error_reporting(E_ALL);
+if(version_compare(PHP_VERSION, PHP_VERSION_REQUIRED, '<')) {
+	header('Content-Type: text/plain');
+	exit(sprintf('PHP %s is not supported (required: PHP %s or higher)', PHP_VERSION, PHP_VERSION_REQUIRED));
+}
+
+// load error exception handling
+require_once 'lib/error_exceptions.php';
 
 // load autoincluder
 require_once 'lib/Classpath.class.php';
