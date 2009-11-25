@@ -28,8 +28,6 @@ class SteamID {
 	const STEAMID64_BASE = '76561197960265728';
 
 	public function __construct($sID) {
-		$sPrefix = (PHP_SHLIB_SUFFIX === 'dll') ? 'php_' : '';
-
 		// make sure the bcmath extension is loaded
 		if(!extension_loaded('bcmath')) {
 			throw new RuntimeException("BCMath extension required");
