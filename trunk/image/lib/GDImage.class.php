@@ -30,7 +30,7 @@ class GDImage {
 	public function __construct() {
 		// make sure the GD extension is loaded
 		if(!extension_loaded('gd') || !function_exists('gd_info')) {
-			throw new RuntimeException('GD extension not loaded');
+			throw new RuntimeException('GD extension required');
 		}
 	}
 	

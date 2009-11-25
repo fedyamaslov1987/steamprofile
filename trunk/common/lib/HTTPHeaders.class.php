@@ -97,6 +97,7 @@ class HTTPHeaders {
 		// clear old headers
 		self::$aRequestHeaders = array();
 	
+		// use the apache function, if possible
 		if(function_exists('apache_request_headers')) {
 			$aRequestHeaders = apache_request_headers();
 			
@@ -122,6 +123,7 @@ class HTTPHeaders {
 		// clear old headers
 		self::$aResponseHeaders = array();
 	
+		// use the apache function, if possible
 		if(function_exists('apache_response_headers')) {
 			self::$aResponseHeaders = apache_response_headers();
 		} else {

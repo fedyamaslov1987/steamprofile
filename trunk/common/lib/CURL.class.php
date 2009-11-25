@@ -31,7 +31,7 @@ class CURL {
 	public function __construct($sURL) {
 		// make sure the cURL extension is loaded
 		if(!extension_loaded('curl') || !function_exists('curl_init')) {
-			throw new RuntimeException('cURL extension not loaded');
+			throw new RuntimeException('cURL extension required');
 		}
 	
 		$this->cURLSession = curl_init($sURL);

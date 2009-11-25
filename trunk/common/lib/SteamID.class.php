@@ -30,8 +30,9 @@ class SteamID {
 	public function __construct($sID) {
 		$sPrefix = (PHP_SHLIB_SUFFIX === 'dll') ? 'php_' : '';
 
-		if(!extension_loaded('bcmath') && !dl($sPrefix.'bcmath.'.PHP_SHLIB_SUFFIX)) {
-			throw new RuntimeException("BCMath extension not avaiable");
+		// make sure the bcmath extension is loaded
+		if(!extension_loaded('bcmath')) {
+			throw new RuntimeException("BCMath extension required");
 		}
 
 		if($this->isValidSteamID($sID)) {
