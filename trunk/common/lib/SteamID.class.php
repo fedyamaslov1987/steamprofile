@@ -84,7 +84,7 @@ class SteamID {
 		$sServer = $aTMP[1];
 		$sAuth = $aTMP[2];
 
-		if((count($aTMP) == 3) && $sAuth != '0' && is_numeric($sServer) && is_numeric($sAuth)) {
+		if(count($aTMP) == 3 && $sAuth != '0' && is_numeric($sServer) && is_numeric($sAuth)) {
 			$sComID = bcmul($sAuth, "2"); // multipy Auth-ID with 2
 			$sComID = bcadd($sComID, $sServer); // add Server-ID
 			$sComID = bcadd($sComID, self::STEAMID64_BASE); // add this odd long number

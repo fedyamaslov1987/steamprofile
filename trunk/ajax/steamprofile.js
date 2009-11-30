@@ -40,6 +40,7 @@ function SteamProfile() {
 	var themePath;
 	var showGameBanner;
 	var showSliderMenu;
+	var showTF2ItemsIcon;
 	var profiles = new Array();
 	var profileCache = new Object();
 	var loadLock = false;
@@ -151,6 +152,7 @@ function SteamProfile() {
 	function loadConfig() {
 		showSliderMenu = getConfigBool('slidermenu');
 		showGameBanner = getConfigBool('gamebanner');
+		showTF2ItemsIcon = getConfigBool('tf2items');
 	
 		// set theme stylesheet
 		themePath = basePath + 'themes/' + getConfigString('theme') + '/';
@@ -248,9 +250,13 @@ function SteamProfile() {
 						profile.find('.sp-joingame').remove();
 					}
 				
-					// add 'View Items' link href
-					profile.find('.sp-viewitems')
-						.attr('href', 'http://tf2items.com/profiles/' + profileData.find('profile > steamID64').text());
+					if(showTF2ItemsIcon) {
+						// add 'View Items' link href
+						profile.find('.sp-viewitems')
+							.attr('href', 'http://tf2items.com/profiles/' + profileData.find('profile > steamID64').text());
+					} else {
+						profile.find('.sp-viewitems').remove();
+					}
 					
 					// add 'Add Friend' link href
 					profile.find('.sp-addfriend')

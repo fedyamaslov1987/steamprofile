@@ -64,6 +64,12 @@ class HTTPHeaders {
 		504 => 'Gateway Timeout',
 		505 => 'HTTP Version Not Supported'
 	);
+	private static $aSpecialCase = array(
+		'te' 				=> 'TE',
+		'content-md5' 		=> 'Content-MD5',
+		'etag' 				=> 'ETag',
+		'www-authenticate'	=> 'WWW-Authenticate'
+	);
 	
 	public function __construct() {
 		if(count(self::$aRequestHeaders) == 0) {
@@ -76,6 +82,16 @@ class HTTPHeaders {
 	}
 	
 	public function formatKey($sKey, $sSeparator) {
+		$sKey = trim($sKey);
+	
+		// Some header names like "ETag" for example would
+		// become "Etag" here, which could cause trouble for
+		// some browsers, so better use the format from the list.
+		$sKeyLower = strtolower($sKey);
+		if(isset(self::$aSpecialCase[$sKeyLower])) {
+			return self::$aSpecialCase[$sKeyLower];
+		}
+	
 		// split the key
 		$aWords = explode($sSeparator, $sKey);
 		$iWords = count($aWords);
@@ -147,12 +163,15 @@ class HTTPHeaders {
 		if(headers_sent()) {
 			return false;
 		} else {
-			$sName = $this->fixKeyCase($sName);
+			$sName = $this->formatKey($sName, '-');
+			
 			if($sValue == null) {
 				header($sName, $bReplace);
 			} else {
 				header("$sName: $sValue", $bReplace);
+				self::$aResponseHeaders[$sName] = $sValue;
 			}
+			
 			return true;
 		}
 	}
@@ -195,6 +214,17 @@ class HTTPHeaders {
 			return false;
 		} else {
 			$this->setResponse('Last-Modified', $sModifiedActual);
+			return true;
+		}
+	}
+	
+	public function hasEntityTag($sETag) {
+		$sCurrentETag = $this->getRequest('If-None-Match');
+		
+		if($sCurrentETag == null || $sCurrentETag !== $sETag) {
+			$this->setResponse('ETag', $sETag);
+			return false;
+		} else {
 			return true;
 		}
 	}

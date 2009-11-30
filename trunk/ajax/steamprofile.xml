@@ -7,6 +7,8 @@
 		<var name="slidermenu">true</var>
 		<!-- If set to true, the banner of the currenty played game will be shown in the badge background. -->
 		<var name="gamebanner">true</var>
+		<!-- If set to true, an icon linked to tf2items.com will be shown. -->
+		<var name="tf2items">true</var>
 	</vars>
 	<!-- The HTML templates for DOM manipulation. Change only if you know what you're doing. -->
 	<templates>
@@ -28,7 +30,7 @@
 					<div class="sp-content">
 						<a class="sp-joingame" title="Join Game" href=""><img src="icon_join_game.png" width="16" height="16" alt="" /></a>
 						<a class="sp-addfriend" title="Add to Friends" href=""><img src="icon_add_friend.png" width="16" height="16" alt="" /></a>
-						<a class="sp-viewitems" title="View Items" href="" target="_blank"><img src="icon_view_items.png" width="16" height="16" alt="" /></a>
+						<a class="sp-viewitems" title="View TF2 Items" href="" target="_blank"><img src="icon_view_items.png" width="16" height="16" alt="" /></a>
 					</div>
 				</div>
 			</div>
