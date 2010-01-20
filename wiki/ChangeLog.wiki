@@ -3,6 +3,11 @@
 
 = SteamProfile Ajax =
 
+== 2.0.3 ==
+ * Updated jQuery to 1.4
+ * Added option to hide tf2items.com icon in steamprofile.xml
+ * Fixed PHP version and extension checking
+ 
 == 2.0.2 ==
  * Improved HTTP handling (direct data output and caching instead of redirecting)
  * Changed directory structure
