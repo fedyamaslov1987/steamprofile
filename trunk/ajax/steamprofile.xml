@@ -9,6 +9,8 @@
 		<var name="gamebanner">true</var>
 		<!-- If set to true, an icon linked to tf2items.com will be shown. -->
 		<var name="tf2items">true</var>
+        
+		<var name="language">auto</var>
 	</vars>
 	<!-- The HTML templates for DOM manipulation. Change only if you know what you're doing. -->
 	<templates>
@@ -23,14 +25,14 @@
 					</a>
 				</div>
 				<div class="sp-info">
-					<a target="_blank" href=""></a><br />
+					<a class="sp-name" target="_blank" href=""></a><br />
 				</div>
 				<div class="sp-extra">
 					<div class="sp-handle"></div>
 					<div class="sp-content">
-						<a class="sp-joingame" title="Join Game" href=""><img src="icon_join_game.png" width="16" height="16" alt="" /></a>
-						<a class="sp-addfriend" title="Add to Friends" href=""><img src="icon_add_friend.png" width="16" height="16" alt="" /></a>
-						<a class="sp-viewitems" title="View TF2 Items" href="" target="_blank"><img src="icon_view_items.png" width="16" height="16" alt="" /></a>
+						<a class="sp-joingame" href=""><img src="icon_join_game.png" width="16" height="16" alt="" /></a>
+						<a class="sp-addfriend" href=""><img src="icon_add_friend.png" width="16" height="16" alt="" /></a>
+						<a class="sp-viewitems" href="" target="_blank"><img src="icon_view_items.png" width="16" height="16" alt="" /></a>
 					</div>
 				</div>
 			</div>
@@ -42,7 +44,7 @@
 		<![CDATA[
 			<div class="sp-loading">
 				<img src="loading.gif" width="32" height="32" alt="" />
-				Loading...
+				<span class="sp-loading-string"></span>
 			</div>
 		]]>
 		</loading>
@@ -50,6 +52,7 @@
 		<![CDATA[
 			<div class="sp-error">
 				<img src="error.png" width="16" height="16" alt="Error" />
+                <span class="sp-error-string"></span>
 			</div>
 		]]>
 		</error>
