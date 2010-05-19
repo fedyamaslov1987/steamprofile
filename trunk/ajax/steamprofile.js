@@ -49,6 +49,37 @@ function SteamProfile() {
 	var profileTpl;
 	var loadingTpl;
 	var errorTpl;
+	var lang = "english";
+	var langLocal = "english";
+	var langData = {
+		english : {
+			loading : "Loading…",
+			no_profile : "This user has not yet set up their Steam Community profile.",
+			private_profile : "This profile is private.",
+			invalid_data : "Invalid profile data.",
+			join_game : "Join Game",
+			add_friend : "Add to Friends",
+			view_tf2items : "View TF2 Backpack",
+		},
+		german : {
+			loading : "Lade…",
+			no_profile : "Dieser Benutzer hat bisher kein Steam Community Profil angelegt.",
+			private_profile : "Dieses Profil is privat.",
+			invalid_data : "Ungültige Profildaten.",
+			join_game : "Spiel beitreten",
+			add_friend : "Als Freund hinzufügen",
+			view_tf2items : "TF2 Rucksack ansehen",
+		},
+		portuguese : {
+			loading : "Carregando…",
+			no_profile : "This user has not yet set up their Steam Community profile.",
+			private_profile : "This profile is private.",
+			invalid_data : "Invalid profile data.",
+			join_game : "Entrar",
+			add_friend : "Adicionar à sua lista de amigos",
+			view_tf2items : "Ver Itens do TF2",
+		}
+	};
 
 	this.init = function() {
 		// get our <script>-tag
@@ -138,7 +169,7 @@ function SteamProfile() {
 	}
 	
 	function getXMLProxyURL(profileID) {
-		return basePath + 'xmlproxy.php?id=' + escape(profileID);
+		return basePath + 'xmlproxy.php?id=' + escape(profileID) + '&lang=' + escape(lang);
 	}
 	
 	function getConfigString(name) {
@@ -153,6 +184,13 @@ function SteamProfile() {
 		showSliderMenu = getConfigBool('slidermenu');
 		showGameBanner = getConfigBool('gamebanner');
 		showTF2ItemsIcon = getConfigBool('tf2items');
+		lang = getConfigString('language');
+		langLocal = lang;
+		
+		// fall back to english if no translation is available for the selected language in SteamProfile
+		if(langData[langLocal] == null) {
+			langLocal = "english";
+		}
 	
 		// set theme stylesheet
 		themePath = basePath + 'themes/' + getConfigString('theme') + '/';
@@ -167,6 +205,12 @@ function SteamProfile() {
 		profileTpl.find('img').attrAppend('src', themePath);
 		loadingTpl.find('img').attrAppend('src', themePath);
 		errorTpl.find('img').attrAppend('src', themePath);
+		
+		// set localization strings
+		profileTpl.find('.sp-joingame').attr('title', langData[langLocal]['join_game']);
+		profileTpl.find('.sp-addfriend').attr('title', langData[langLocal]['add_friend']);
+		profileTpl.find('.sp-viewitems').attr('title', langData[langLocal]['view_tf2items']);
+		loadingTpl.find('.sp-loading-text').append(langData[langLocal]['loading']);
 		
 		// we can now unlock the refreshing function
 		configLoaded = true;
@@ -215,7 +259,7 @@ function SteamProfile() {
 		if (profileData.find('profile').length != 0) {
 			if (profileData.find('profile > steamID').text() == '') {
 				// the profile doesn't exists yet
-				return createError('This user has not yet set up their Steam Community profile.');
+				return createError(langData[langLocal]['no_profile']);
 			} else {
 				// profile data looks good
 				var profile = profileTpl.clone();
@@ -228,7 +272,7 @@ function SteamProfile() {
 				
 				// set state message
 				if (profileData.find('profile > visibilityState').text() == '1') {
-					profile.find('.sp-info').append('This profile is private.');
+					profile.find('.sp-info').append(langData[langLocal]['private_profile']);
 				} else {
 					profile.find('.sp-info').append(profileData.find('profile > stateMessage').text());
 				}
@@ -278,7 +322,7 @@ function SteamProfile() {
 			return createError(profileData.find('response > error').text());
 		} else {
 			// we got invalid xml data
-			return createError('Invalid community data.');
+			return createError(langData[langLocal]['invalid_data']);
 		}
 	}
 	
@@ -291,7 +335,7 @@ function SteamProfile() {
 
 	function createError(message) {
 		var errorTmp = errorTpl.clone();
-		errorTmp.append(message);	
+		errorTmp.find('.sp-error-text').append(message);	
 		return errorTmp;
 	}
 };

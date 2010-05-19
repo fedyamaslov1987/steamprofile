@@ -63,6 +63,38 @@ class SteamProfileXMLProxyApp {
 			// add xml parameter so we get xml data (hopefully)
 			$sXmlUrl .= '?xml=1';
 			
+			// get language
+			if(isset($_GET['lang']) && !empty($_GET['lang'])) {
+				$sLang = strtolower($_GET['lang']);
+				$aValidLang = array(
+					'danish',
+					'czech',
+					'dutch',
+					'english',
+					'finnish',
+					'french',
+					'german',
+					'hungarian',
+					'italian',
+					'japanese',
+					'norwegian',
+					'polish',
+					'portuguese',
+					'romanian',
+					'russian',
+					'schinese',
+					'spanish',
+					'swedish',
+					'tchinese',
+					'thai'
+				);
+				
+				if(in_array($sLang, $aValidLang)) {
+					// add language parameter
+					$sXmlUrl .= '&l='.$sLang;
+				}
+			}
+			
 			$XmlCache = new Cache($sCacheDir, $iCacheLifetime, 'xml');
 			$XmlFile = $XmlCache->getFile($sXmlUrl);
 

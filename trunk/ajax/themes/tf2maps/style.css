@@ -45,9 +45,12 @@
 }
 
 .steamprofile .sp-loading {
+	margin: 4px;
+}
+
+.steamprofile .sp-loading .sp-loading-text {
 	color: #CCCCCC;
 	font-size: 20px;
-	margin: 4px;
 }
 
 .steamprofile .sp-loading img {
@@ -56,9 +59,12 @@
 }
 
 .steamprofile .sp-error {
+	margin: 4px;
+}
+
+.steamprofile .sp-error .sp-error-text {
 	color: #884444;
 	font-size: 12px;
-	margin: 4px;
 }
 
 .steamprofile .sp-error img {
