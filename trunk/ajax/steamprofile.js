@@ -263,7 +263,7 @@ function SteamProfile() {
 						.attr('href', 'steam://friends/add/' + profileData.find('profile > steamID64').text());
 					
 					// add other link hrefs
-					profile.find('.sp-avatar a, .sp-info a')
+					profile.find('.sp-avatar a, .sp-info a.sp-name')
 						.attr('href', 'http://steamcommunity.com/profiles/' + profileData.find('profile > steamID64').text());
 					
 					createEvents(profile);
