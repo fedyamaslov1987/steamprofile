@@ -24,16 +24,11 @@ jQuery.fn.attrAppend = function(name, value) {
 		elem = $(this);
 		
 		// append attribute only if extisting and not empty
-		if(elem.attr(name) != undefined && elem.attr(name) != "") {
+		if(elem.attr(name) !== undefined && elem.attr(name) != "") {
 			elem.attr(name, value + elem.attr(name));
 		}
 	});
 };
- 
-$(document).ready(function() {
-	SteamProfile = new SteamProfile();
-	SteamProfile.init();
-});
 
 function SteamProfile() {
 	var basePath;
@@ -41,8 +36,8 @@ function SteamProfile() {
 	var showGameBanner;
 	var showSliderMenu;
 	var showTF2ItemsIcon;
-	var profiles = new Array();
-	var profileCache = new Object();
+	var profiles = [];
+	var profileCache = {};
 	var loadLock = false;
 	var configLoaded = false;
 	var configData;
@@ -59,7 +54,7 @@ function SteamProfile() {
 			invalid_data : "Invalid profile data.",
 			join_game : "Join Game",
 			add_friend : "Add to Friends",
-			view_tf2items : "View TF2 Backpack",
+			view_tf2items : "View TF2 Backpack"
 		},
 		german : {
 			loading : "Lade…",
@@ -68,7 +63,7 @@ function SteamProfile() {
 			invalid_data : "Ungültige Profildaten.",
 			join_game : "Spiel beitreten",
 			add_friend : "Als Freund hinzufügen",
-			view_tf2items : "TF2 Rucksack ansehen",
+			view_tf2items : "TF2 Rucksack ansehen"
 		},
 		portuguese : {
 			loading : "Carregando…",
@@ -77,7 +72,7 @@ function SteamProfile() {
 			invalid_data : "Invalid profile data.",
 			join_game : "Entrar",
 			add_friend : "Adicionar à sua lista de amigos",
-			view_tf2items : "Ver Itens do TF2",
+			view_tf2items : "Ver Itens do TF2"
 		}
 	};
 
@@ -86,7 +81,7 @@ function SteamProfile() {
 		var scriptElement = $('script[src$=\'steamprofile.js\']');
 		
 		// in rare cases, this script could be included without <script>
-		if(scriptElement.length == 0) {
+		if(scriptElement.length === 0) {
 			return;
 		}
 		
@@ -103,7 +98,7 @@ function SteamProfile() {
 				loadConfig();
 			}
 		});
-	}
+	};
 	
 	this.refresh = function() {
 		// make sure we already got a loaded config
@@ -119,7 +114,7 @@ function SteamProfile() {
 		profiles = $('.steamprofile[title]');
 		
 		// are there any profiles to build?
-		if(profiles.length == 0) {
+		if(profiles.length === 0) {
 			return;
 		}
 
@@ -135,7 +130,7 @@ function SteamProfile() {
 		
 		// load first profile
 		loadProfile(0);
-	}
+	};
 	
 	this.load = function(profileID) {
 		// make sure we already got a loaded config
@@ -162,11 +157,11 @@ function SteamProfile() {
 		});
 		
 		return profile;
-	}
+	};
 	
 	this.isLocked = function() {
 		return loadLock;
-	}
+	};
 	
 	function getXMLProxyURL(profileID) {
 		return basePath + 'xmlproxy.php?id=' + escape(profileID) + '&lang=' + escape(lang);
@@ -207,10 +202,10 @@ function SteamProfile() {
 		errorTpl.find('img').attrAppend('src', themePath);
 		
 		// set localization strings
-		profileTpl.find('.sp-joingame').attr('title', langData[langLocal]['join_game']);
-		profileTpl.find('.sp-addfriend').attr('title', langData[langLocal]['add_friend']);
-		profileTpl.find('.sp-viewitems').attr('title', langData[langLocal]['view_tf2items']);
-		loadingTpl.find('.sp-loading-text').append(langData[langLocal]['loading']);
+		profileTpl.find('.sp-joingame').attr('title', langData[langLocal].join_game);
+		profileTpl.find('.sp-addfriend').attr('title', langData[langLocal].add_friend);
+		profileTpl.find('.sp-viewitems').attr('title', langData[langLocal].view_tf2items);
+		loadingTpl.append(langData[langLocal].loading);
 		
 		// we can now unlock the refreshing function
 		configLoaded = true;
@@ -256,13 +251,15 @@ function SteamProfile() {
 	}
 
 	function createProfile(profileData) {
-		if (profileData.find('profile').length != 0) {
+		if (profileData.find('profile').length !== 0) {
+			var profile;
+		
 			if (profileData.find('profile > steamID').text() == '') {
 				// the profile doesn't exists yet
-				return createError(langData[langLocal]['no_profile']);
+				return createError(langData[langLocal].no_profile);
 			} else {
 				// profile data looks good
-				var profile = profileTpl.clone();
+				profile = profileTpl.clone();
 				var onlineState = profileData.find('profile > onlineState').text();
 				
 				// set state class, avatar image and name
@@ -272,13 +269,13 @@ function SteamProfile() {
 				
 				// set state message
 				if (profileData.find('profile > visibilityState').text() == '1') {
-					profile.find('.sp-info').append(langData[langLocal]['private_profile']);
+					profile.find('.sp-info').append(langData[langLocal].private_profile);
 				} else {
 					profile.find('.sp-info').append(profileData.find('profile > stateMessage').text());
 				}
 				
 				// set game background
-				if (showGameBanner && profileData.find('profile > inGameInfo > gameLogoSmall').length != 0) {
+				if (showGameBanner && profileData.find('profile > inGameInfo > gameLogoSmall').length !== 0) {
 					profile.css('background-image', 'url(' + profileData.find('profile > inGameInfo > gameLogoSmall').text() + ')');
 				} else {
 					profile.removeClass('sp-bg-game');
@@ -286,7 +283,7 @@ function SteamProfile() {
 				}
 				
 				if(showSliderMenu) {
-					if (profileData.find('profile > inGameInfo > gameJoinLink').length != 0) {
+					if (profileData.find('profile > inGameInfo > gameJoinLink').length !== 0) {
 						// add 'Join Game' link href
 						profile.find('.sp-joingame').attr('href', profileData.find('profile > inGameInfo > gameJoinLink').text());
 					} else {
@@ -317,12 +314,12 @@ function SteamProfile() {
 			}
 			
 			return profile;
-		} else if (profileData.find('response').length != 0) {
+		} else if (profileData.find('response').length !== 0) {
 			// steam community returned a message
 			return createError(profileData.find('response > error').text());
 		} else {
 			// we got invalid xml data
-			return createError(langData[langLocal]['invalid_data']);
+			return createError(langData[langLocal].invalid_data);
 		}
 	}
 	
@@ -335,12 +332,12 @@ function SteamProfile() {
 
 	function createError(message) {
 		var errorTmp = errorTpl.clone();
-		errorTmp.find('.sp-error-text').append(message);	
+		errorTmp.append(message);	
 		return errorTmp;
 	}
-};
+}
 
-
-
-
-
+$(document).ready(function() {
+	SteamProfile = new SteamProfile();
+	SteamProfile.init();
+});

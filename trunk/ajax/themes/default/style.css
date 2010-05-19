@@ -44,31 +44,19 @@
 }
 
 .steamprofile .sp-loading {
-	margin: 4px;
-}
-
-.steamprofile .sp-loading .sp-loading-text {
+	margin: 8px;
+	padding-left: 40px;
 	color: #606060;
 	font-size: 20px;
-}
-
-.steamprofile .sp-loading img {
-	vertical-align: middle;
-	margin-right: 4px;
+	background: transparent url(loading.gif) no-repeat left center;
 }
 
 .steamprofile .sp-error {
-	margin: 4px;
-}
-
-.steamprofile .sp-error .sp-error-text {
+	margin: 4px 8px;
+	padding-left: 22px;
 	color: #cc4444;
 	font-size: 12px;
-}
-
-.steamprofile .sp-error img {
-	vertical-align: middle;
-	margin-right: 4px;
+	background: transparent url(error.png) no-repeat left center;
 }
 
 .steamprofile:hover {
@@ -90,20 +78,12 @@
 	font-weight: bold;
 }
 
-.steamprofile .sp-in-game .sp-avatar {
-	background-image: url(iconholder_ingame.png);
-}
-
 .steamprofile .sp-in-game {
 	color: #8bc53f;
 }
 
 .steamprofile .sp-in-game a {
 	color: #b1fb50;
-}
-
-.steamprofile .sp-online .sp-avatar {
-	background-image: url(iconholder_online.png);
 }
 
 .steamprofile .sp-online {
@@ -114,8 +94,18 @@
 	color: #8ecbff;
 }
 
+.steamprofile .sp-online .sp-avatar,
+.steamprofile .sp-in-game .sp-avatar,
 .steamprofile .sp-offline .sp-avatar {
-	background-image: url(iconholder_offline.png);
+	background: transparent url(iconholder.png) no-repeat 0 0;
+}
+
+.steamprofile .sp-online .sp-avatar {
+	background-position: -40px 0;
+}
+
+.steamprofile .sp-in-game .sp-avatar {
+	background-position: -80px 0;
 }
 
 .steamprofile .sp-offline .sp-info,
@@ -170,4 +160,21 @@
 .steamprofile .sp-content a:hover {
 	text-decoration: underline;
 	color: #ffffff;
+}
+
+.steamprofile .sp-addfriend,
+.steamprofile .sp-joingame,
+.steamprofile .sp-viewitems {
+	display: inline-block;
+	width: 16px;
+	height: 16px;
+	background: transparent url(icons.png) no-repeat 0 0;
+}
+
+.steamprofile .sp-addfriend {
+	background-position: -16px 0;
+}
+
+.steamprofile .sp-joingame {
+	background-position: -32px 0;
 }
