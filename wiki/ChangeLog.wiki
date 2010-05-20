@@ -3,6 +3,12 @@
 
 = SteamProfile Ajax =
 
+== 2.0.4 ==
+ * Added multi-language support. Currently, translated tool tips and error messages are available for English, German and Portuguese only. 17 more languages are available for basic translations, like status messages.
+ * Added packed version of steamprofile.js for less traffic usage
+ * Improved HTML templates to avoid 404 errors because of temporary images with wrong paths
+ * Fixed issue 6 - wrong user name links
+
 == 2.0.3 ==
  * Updated jQuery to 1.4
  * Added option to hide tf2items.com icon in steamprofile.xml
