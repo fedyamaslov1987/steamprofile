@@ -21,6 +21,7 @@
 
 class SteamProfileImage extends GDImage {
     public function createProfile($sProfileUrl, $sCurrentTheme) {
+		parent::__construct();
 		// load global config
 		$Config = Config::load('image.cfg');
 		
