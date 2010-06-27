@@ -79,7 +79,12 @@ class SteamProfileImageApp {
 			} catch(SteamProfileImageException $e) {
 				// on debug mode, re-throw
 				if($bDebug) {
-					throw $e->getPrevious();
+					$ep = $e->getPrevious();
+					throw $ep == null? $e : $ep;
+				}
+				
+				if($e instanceof RuntimeException) {
+					throw $e;
 				}
 				
 				// an exception was thrown in SteamProfileImage,
@@ -99,7 +104,8 @@ class SteamProfileImageApp {
 			} catch(Exception $e) {
 				// on debug mode, re-throw
 				if($bDebug) {
-					throw $e->getPrevious();
+					$ep = $e->getPrevious();
+					throw $ep == null? $e : $ep;
 				}
 			
 				// an exception was thrown in SteamProfileImage,
@@ -113,10 +119,10 @@ class SteamProfileImageApp {
 				}
 			}
 		} catch(Exception $e) {
-			if($bDebug) {
+			if($bDebug || !GDImage::isAvailable()) {
 				$Headers = new HTTPHeaders();
 				$Headers->setResponse('Content-Type', 'text/plain');
-				echo "$e\n";
+				echo $bDebug? "$e\n" : $e->getMessage();
 			} else {
 				$ErrorImage = new ErrorImage($e->getMessage());
 				$ErrorImage->toPNG();

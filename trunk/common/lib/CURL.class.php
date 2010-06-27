@@ -30,11 +30,15 @@ class CURL {
 
 	public function __construct($sURL) {
 		// make sure the cURL extension is loaded
-		if(!extension_loaded('curl') || !function_exists('curl_init')) {
+		if(!self::isAvailable()) {
 			throw new RuntimeException('cURL extension required');
 		}
 	
 		$this->cURLSession = curl_init($sURL);
+	}
+	
+	public static function isAvailable() {
+		return extension_loaded('curl') && function_exists('curl_init');
 	}
 	
 	protected function setOption($iOpt, $value) {

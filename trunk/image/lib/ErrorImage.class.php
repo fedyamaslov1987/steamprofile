@@ -21,6 +21,7 @@
 
 class ErrorImage extends GDImage {
     public function __construct($sMessage) {
+		parent::__construct();
 		$sMessage = wordwrap(strip_tags($sMessage), 40, "\n", true);
 		
 		parent::create(246, 48);

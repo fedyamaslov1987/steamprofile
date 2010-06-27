@@ -29,9 +29,13 @@ class GDImage {
 	
 	public function __construct() {
 		// make sure the GD extension is loaded
-		if(!extension_loaded('gd') || !function_exists('gd_info')) {
+		if(!self::isAvailable()) {
 			throw new RuntimeException('GD extension required');
 		}
+	}
+	
+	public static function isAvailable() {
+		return extension_loaded('gd') && function_exists('gd_info');
 	}
 	
 	public function create($iWidth, $iHeight) {
