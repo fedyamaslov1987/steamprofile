@@ -1,22 +1,20 @@
 <?php
 /**
- *	This file is part of SteamProfile.
- *
  *	Written by Nico Bergemann <barracuda415@yahoo.de>
  *	Copyright 2008 Nico Bergemann
  *
- *	SteamProfile is free software: you can redistribute it and/or modify
+ *	This program is free software: you can redistribute it and/or modify
  *	it under the terms of the GNU General Public License as published by
  *	the Free Software Foundation, either version 3 of the License, or
  *	(at your option) any later version.
  *
- *	SteamProfile is distributed in the hope that it will be useful,
+ *	This program is distributed in the hope that it will be useful,
  *	but WITHOUT ANY WARRANTY; without even the implied warranty of
  *	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  *	GNU General Public License for more details.
  *
  *	You should have received a copy of the GNU General Public License
- *	along with SteamProfile.  If not, see <http://www.gnu.org/licenses/>.
+ *	along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
 class SteamProfileImage extends GDImage {
@@ -114,7 +112,7 @@ class SteamProfileImage extends GDImage {
 		$this->loadPng($this->aThemeFiles['background']);
 		
 		// enable alpha
-		$this->setAlpha(true);
+		$this->setSaveAlpha(true);
 		
 		try {
 			// load XML data
@@ -315,7 +313,7 @@ class SteamProfileImage extends GDImage {
 		}
 		
 		// draw avatar
-		$image->copyResize($avatarImage, 2, 2, 0, 0,
+		$image->copyResampled($avatarImage, 2, 2, 0, 0,
 			$iAvatarImageDstWidth, $iAvatarImageDstHeight,
 			$iAvatarImageSrcWidth, $iAvatarImageSrcHeight);
 		$avatarImage->destroy();
@@ -389,7 +387,7 @@ class SteamProfileImage extends GDImage {
 		}
 		
 		// draw game image
-		$image->copyResize($gameImage, 2, 2, 0, 0,
+		$image->copyResampled($gameImage, 2, 2, 0, 0,
 			$iGameImageDstWidth, $iGameImageDstHeight,
 			$iGameImageSrcWidth, $iGameImageSrcHeight);
 		$gameImage->destroy();
@@ -509,12 +507,13 @@ class SteamProfileImage extends GDImage {
 		$this->loadPng($this->aThemeFiles['background']);
 		
 		// enable alpha
-		$this->setAlpha(true);
+		$this->setAlphaBlending(true);
+		$this->setSaveAlpha(true);
 	
 		// draw error icon
 		$errorIcon = new GDImage();
 		$errorIcon->loadPng($this->aThemeFiles["error"]);
-		$this->copyResize($errorIcon, 16, $this->getHeight() / 2 - 12, 0, 0,
+		$this->copyResampled($errorIcon, 16, $this->getHeight() / 2 - 12, 0, 0,
 			24, 24,
 			$errorIcon->getWidth(), $errorIcon->getHeight());
 		$errorIcon->destroy();
