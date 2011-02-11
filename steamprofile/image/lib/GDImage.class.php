@@ -1,29 +1,28 @@
 <?php
-/**
- *	This file is part of SteamProfile.
- *
+/*
  *	Written by Nico Bergemann <barracuda415@yahoo.de>
- *	Copyright 2010 Nico Bergemann
+ *	Copyright 2011 Nico Bergemann
  *
- *	SteamProfile is free software: you can redistribute it and/or modify
+ *	This program is free software: you can redistribute it and/or modify
  *	it under the terms of the GNU General Public License as published by
  *	the Free Software Foundation, either version 3 of the License, or
  *	(at your option) any later version.
  *
- *	SteamProfile is distributed in the hope that it will be useful,
+ *	This program is distributed in the hope that it will be useful,
  *	but WITHOUT ANY WARRANTY; without even the implied warranty of
  *	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  *	GNU General Public License for more details.
  *
  *	You should have received a copy of the GNU General Public License
- *	along with SteamProfile.  If not, see <http://www.gnu.org/licenses/>.
+ *	along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
- /**
- * Class GDImage
+/**
+ * A wrapper for GD functions (mostly image[...])
  *
- * A basic GD object wrapper
+ * @author Nico Bergemann
  */
+
 class GDImage {
 	protected $rImage;
 	
@@ -66,6 +65,10 @@ class GDImage {
 		return gd_info();
 	}
 	
+	public function loadFont($sFontFile) {
+		return imageloadfont($sFontFile);
+	}
+	
 	public function drawText($sText, $iFont, $iColor, $iX, $iY) {
 		$aText = explode("\n", $sText);
 		$iLineHeight = imagefontheight($iFont);
@@ -76,16 +79,54 @@ class GDImage {
 		}
 	}
 	
-	public function drawTextFT($sText, $sFontFile, $fSize, $fAngle, $iColor, $iX, $iY, $aExtra = array()) {
+	public function drawTextFt($sText, $sFontFile, $fSize, $fAngle, $iColor, $iX, $iY, $aExtra = array()) {
 		return imagefttext($this->rImage, $fSize, $fAngle, $iX, $iY, $iColor, $sFontFile, $sText, $aExtra);
 	}
 	
-	public function drawTextTTF($sText, $sFontFile, $fSize, $fAngle, $iColor, $iX, $iY) {
+	public function drawTextTtf($sText, $sFontFile, $fSize, $fAngle, $iColor, $iX, $iY) {
 		return imagettftext($this->rImage, $fSize, $fAngle, $iX, $iY, $iColor, $sFontFile, $sText);
+	}
+	
+	public function getTtfTextBounds($sText, $sFontFile, $fSize, $fAngle) {
+		return imagettfbbox($fSize, $fAngle, $sFontFile, $sText);
+	}
+	
+	public function getTtfTextDim($sText, $sFontFile, $fSize, $fAngle) {
+		return self::convertBoundsToDim($this->getTtfTextBounds($sText, $sFontFile, $fSize, $fAngle));
+	}
+	
+	public function getFtTextBounds($sText, $sFontFile, $fSize, $fAngle) {
+		return imageftbbox($fSize, $fAngle, $sFontFile, $sText);
+	}
+	
+	public function getFtTextDim($sText, $sFontFile, $fSize, $fAngle) {
+		return self::convertBoundsToDim($this->getFtTextBounds($sText, $sFontFile, $fSize, $fAngle));
+	}
+	
+	private static function convertBoundsToDim($aBounds) {
+		$iMinX = min(array($aBounds[0], $aBounds[2], $aBounds[4], $aBounds[6]));
+		$iMaxX = max(array($aBounds[0], $aBounds[2], $aBounds[4], $aBounds[6]));
+		$iMinY = min(array($aBounds[1], $aBounds[3], $aBounds[5], $aBounds[7]));
+		$iMaxY = max(array($aBounds[1], $aBounds[3], $aBounds[5], $aBounds[7]));
+		
+		return array(
+			'left' => ($iMinX >= -1) ? -abs($iMinX + 1) : abs($iMinX + 2),
+			'top' => abs($iMinY),
+			'width' => $iMaxX - $iMinX,
+			'height' => $iMaxY - $iMinY
+		);
 	}
 	
 	public function drawRectangle($iX1, $iY1, $iX2, $iY2, $iColor) {
 		return imagerectangle($this->rImage, $iX1, $iY1, $iX2, $iY2, $iColor);
+	}
+	
+	public function drawLine($iX1, $iY1, $iX2, $iY2, $iColor) {
+		return imageline($this->rImage, $iX1, $iY1, $iX2, $iY2, $iColor);
+	}
+	
+	public function drawPixel($iX1, $iY1, $iColor) {
+		return imagesetpixel($this->rImage, $iX1, $iY1, $iColor);
 	}
 	
 	public function fill($iX, $iY, $iColor) {
@@ -104,7 +145,11 @@ class GDImage {
 		return imagecopy($this->rImage, $Image->getHandle(), $iX1, $iX2, $iY1, $iY2, $iWidth, $iHeight);
 	}
 	
-	public function copyResize(GDImage $Image, $iX1, $iX2, $iY1, $iY2, $iDstWidth, $iDstHeight, $iWidth, $iHeight) {
+	public function copyResized(GDImage $Image, $iX1, $iX2, $iY1, $iY2, $iDstWidth, $iDstHeight, $iWidth, $iHeight) {
+		return imagecopyresized($this->rImage, $Image->getHandle(), $iX1, $iX2, $iY1, $iY2, $iDstWidth, $iDstHeight, $iWidth, $iHeight);
+	}
+	
+	public function copyResampled(GDImage $Image, $iX1, $iX2, $iY1, $iY2, $iDstWidth, $iDstHeight, $iWidth, $iHeight) {
 		return imagecopyresampled($this->rImage, $Image->getHandle(), $iX1, $iX2, $iY1, $iY2, $iDstWidth, $iDstHeight, $iWidth, $iHeight);
 	}
 	
@@ -112,9 +157,12 @@ class GDImage {
 		return imageantialias($this->rImage, $bAntiAlias);
 	}
 	
-	public function setAlpha($bAlpha) {
+	public function setAlphaBlending($bAlpha) {
 		imagealphablending($this->rImage, $bAlpha);
-		imagesavealpha($this->rImage, $bAlpha);
+	}
+	
+	public function setSaveAlpha($bSaveAlpha) {
+		imagesavealpha($this->rImage, $bSaveAlpha);
 	}
 	
 	public function getColor($iR, $iG, $iB, $bAntiAlias = true) {
@@ -131,6 +179,10 @@ class GDImage {
 	
 	public function getColorTransparent() {
 		return imagecolortransparent($this->rImage);
+	}
+	
+	public function getColorAt($iX, $iY) {
+		return imagecolorat($this->rImage, $iX, $iY);
 	}
 	
 	public function loadGd($sFile) {

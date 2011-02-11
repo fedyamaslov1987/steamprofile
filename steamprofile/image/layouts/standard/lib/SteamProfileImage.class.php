@@ -1,22 +1,20 @@
 <?php
 /**
- *	This file is part of SteamProfile.
- *
  *	Written by Nico Bergemann <barracuda415@yahoo.de>
- *	Copyright 2008 Nico Bergemann
+ *	Copyright 2011 Nico Bergemann
  *
- *	SteamProfile is free software: you can redistribute it and/or modify
+ *	This program is free software: you can redistribute it and/or modify
  *	it under the terms of the GNU General Public License as published by
  *	the Free Software Foundation, either version 3 of the License, or
  *	(at your option) any later version.
  *
- *	SteamProfile is distributed in the hope that it will be useful,
+ *	This program is distributed in the hope that it will be useful,
  *	but WITHOUT ANY WARRANTY; without even the implied warranty of
  *	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  *	GNU General Public License for more details.
  *
  *	You should have received a copy of the GNU General Public License
- *	along with SteamProfile.  If not, see <http://www.gnu.org/licenses/>.
+ *	along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
 class SteamProfileImage extends GDImage {
@@ -105,7 +103,8 @@ class SteamProfileImage extends GDImage {
 		$this->loadPng($this->aThemeFiles['background']);
 		
 		// enable alpha
-		$this->setAlpha(true);
+		$this->setAlphaBlending(true);
+		$this->setSaveAlpha(true);
 		
 		try {
 			// load XML data
@@ -292,7 +291,7 @@ class SteamProfileImage extends GDImage {
 		}
 		
 		// draw game background
-		$this->copyResize($gameBGImage, $this->getWidth() - 128, 0, 0, 0, 128, 48, 120, 45);
+		$this->copyResampled($gameBGImage, $this->getWidth() - 128, 0, 0, 0, 128, 48, 120, 45);
 		$gameBGImage->destroy();
 		
 		// draw fade background over game background
@@ -317,7 +316,8 @@ class SteamProfileImage extends GDImage {
 		$this->loadPng($this->aThemeFiles['background']);
 		
 		// enable alpha
-		$this->setAlpha(true);
+		$this->setAlphaBlending(true);
+		$this->setSaveAlpha(true);
 	
 		// draw error icon
 		$errorIcon = new GDImage();

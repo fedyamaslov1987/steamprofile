@@ -1,22 +1,20 @@
 <?php
 /**
- *	This file is part of SteamProfile.
- *
  *	Written by Nico Bergemann <barracuda415@yahoo.de>
- *	Copyright 2010 Nico Bergemann
+ *	Copyright 2011 Nico Bergemann
  *
- *	SteamProfile is free software: you can redistribute it and/or modify
+ *	This program is free software: you can redistribute it and/or modify
  *	it under the terms of the GNU General Public License as published by
  *	the Free Software Foundation, either version 3 of the License, or
  *	(at your option) any later version.
  *
- *	SteamProfile is distributed in the hope that it will be useful,
+ *	This program is distributed in the hope that it will be useful,
  *	but WITHOUT ANY WARRANTY; without even the implied warranty of
  *	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  *	GNU General Public License for more details.
  *
  *	You should have received a copy of the GNU General Public License
- *	along with SteamProfile.  If not, see <http://www.gnu.org/licenses/>.
+ *	along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
 class SteamProfileImageApp extends SteamProfileApp implements Application {
@@ -30,7 +28,7 @@ class SteamProfileImageApp extends SteamProfileApp implements Application {
 			// load config
 			$oCommonConfig = FileConfig::getInstance('common.cfg');
 			$oImageConfig = FileConfig::getInstance('image.cfg');
-			$oGPCConfig = GPCConfig::getInstance('get');
+			$oGpcConfig = GpcConfig::getInstance('get');
 			
 			// load config vars
 			$iCacheLifetime = $oCommonConfig->getInteger('cache.lifetime', 600);
@@ -39,8 +37,8 @@ class SteamProfileImageApp extends SteamProfileApp implements Application {
 			$bImageFallback = $oImageConfig->getString('image.fallback', true);
 			$sDefaultLayout = $oImageConfig->getString('image.layout.default', 'small');
 			$sDefaultTheme = $oImageConfig->getString('image.theme.default', 'default');
-			$sLayout = $oGPCConfig->getAlphanumString('layout', $sDefaultLayout);
-			$sTheme = $oGPCConfig->getAlphanumString('theme', $sDefaultTheme);
+			$sLayout = $oGpcConfig->getAlphanumString('layout', $sDefaultLayout);
+			$sTheme = $oGpcConfig->getAlphanumString('theme', $sDefaultTheme);
 			
 			// init cache
 			$oImageCache = new Cache($sCacheDir, $iCacheLifetime, 'png');

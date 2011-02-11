@@ -1,22 +1,20 @@
 <?php
 /**
- *	This file is part of SteamProfile.
- *
  *	Written by Nico Bergemann <barracuda415@yahoo.de>
- *	Copyright 2010 Nico Bergemann
+ *	Copyright 2011 Nico Bergemann
  *
- *	SteamProfile is free software: you can redistribute it and/or modify
+ *	This program is free software: you can redistribute it and/or modify
  *	it under the terms of the GNU General Public License as published by
  *	the Free Software Foundation, either version 3 of the License, or
  *	(at your option) any later version.
  *
- *	SteamProfile is distributed in the hope that it will be useful,
+ *	This program is distributed in the hope that it will be useful,
  *	but WITHOUT ANY WARRANTY; without even the implied warranty of
  *	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  *	GNU General Public License for more details.
  *
  *	You should have received a copy of the GNU General Public License
- *	along with SteamProfile.  If not, see <http://www.gnu.org/licenses/>.
+ *	along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
 abstract class SteamProfileApp {
@@ -49,10 +47,10 @@ abstract class SteamProfileApp {
 	
 	public function getProfileUrl($bLang = true) {
 		// load config
-		$oGPCConfig = GPCConfig::getInstance('get');
+		$oGpcConfig = GpcConfig::getInstance('get');
 	
 		// get selected id
-		$sID = $oGPCConfig->getString('id', null);
+		$sID = $oGpcConfig->getString('id', null);
 		
 		if($sID == null) {
 			throw new Exception('No profile ID assigned');
@@ -65,7 +63,7 @@ abstract class SteamProfileApp {
 		if(!$oSteamID->isValid()) {
 			// complain about invalid characters, if found
 			if(!preg_match('/^[a-zA-Z0-9-_]+$/', $sID)) {
-				throw new Exception("Non-alphanumeric alias: $sID");
+				throw new Exception("Invalid profile alias: $sID");
 			}
 			
 			$sXmlUrl .= 'id/'.$sID;
@@ -77,7 +75,7 @@ abstract class SteamProfileApp {
 		$sXmlUrl .= '?xml=1';
 	
 		// get language setting
-		$sLang = $oGPCConfig->getString('lang', null);
+		$sLang = $oGpcConfig->getString('lang', null);
 		
 		if(!$bLang || $sLang == null) {
 			// we're done here
