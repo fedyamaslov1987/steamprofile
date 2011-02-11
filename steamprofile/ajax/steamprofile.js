@@ -1,21 +1,19 @@
 /**
- *	This file is part of SteamProfile.
- *
  *	Written by Nico Bergemann <barracuda415@yahoo.de>
- *	Copyright 2010 Nico Bergemann
+ *	Copyright 2011 Nico Bergemann
  *
- *	SteamProfile is free software: you can redistribute it and/or modify
+ *	This program is free software: you can redistribute it and/or modify
  *	it under the terms of the GNU General Public License as published by
  *	the Free Software Foundation, either version 3 of the License, or
  *	(at your option) any later version.
  *
- *	SteamProfile is distributed in the hope that it will be useful,
+ *	This program is distributed in the hope that it will be useful,
  *	but WITHOUT ANY WARRANTY; without even the implied warranty of
  *	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  *	GNU General Public License for more details.
  *
  *	You should have received a copy of the GNU General Public License
- *	along with SteamProfile.  If not, see <http://www.gnu.org/licenses/>.
+ *	along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
 jQuery.fn.attrAppend = function(name, value) {
@@ -31,19 +29,14 @@ jQuery.fn.attrAppend = function(name, value) {
 };
 
 function SteamProfile() {
+	// path/file config
+	var scriptFile = "steamprofile.js";
+	var configFile = "steamprofile.xml";
+	var proxyFile = "../xmlproxy.php";
 	var basePath;
 	var themePath;
-	var showGameBanner;
-	var showSliderMenu;
-	var showTF2ItemsIcon;
-	var profiles = [];
-	var profileCache = {};
-	var loadLock = false;
-	var configLoaded = false;
-	var configData;
-	var profileTpl;
-	var loadingTpl;
-	var errorTpl;
+	
+	// language config
 	var lang = "english";
 	var langLocal = "english";
 	var langData = {
@@ -59,11 +52,11 @@ function SteamProfile() {
 		german : {
 			loading : "Lade…",
 			no_profile : "Dieser Benutzer hat bisher kein Steam Community Profil angelegt.",
-			private_profile : "Dieses Profil is privat.",
+			private_profile : "Dieses Profil ist privat.",
 			invalid_data : "Ungültige Profildaten.",
 			join_game : "Spiel beitreten",
 			add_friend : "Als Freund hinzufügen",
-			view_tf2items : "TF2 Rucksack ansehen"
+			view_tf2items : "TF2-Items ansehen"
 		},
 		portuguese : {
 			loading : "Carregando…",
@@ -75,23 +68,45 @@ function SteamProfile() {
 			view_tf2items : "Ver Itens do TF2"
 		}
 	};
+	
+	// misc config
+	var loadLock = false;
+	var configLoaded = false;
+	var configData;
+	var showGameBanner;
+	var showSliderMenu;
+	var showTF2ItemsIcon;
 
-	this.init = function() {
-		// get our <script>-tag
-		var scriptElement = $('script[src$=\'steamprofile.js\']');
-		
-		// in rare cases, this script could be included without <script>
-		if(scriptElement.length === 0) {
-			return;
+	// profile data
+	var profiles = [];
+	var profileCache = {};
+	
+	// template data
+	var profileTpl;
+	var loadingTpl;
+	var errorTpl;
+
+	this.init = function() {		
+		if (typeof spBasePath == "string") {
+			basePath = spBasePath;
+		} else {
+			// extract the path from the src attribute
+
+			// get our <script>-tag
+			var scriptElement = $('script[src$=\'' + scriptFile + '\']');
+			
+			// in rare cases, this script could be included without <script>
+			if(scriptElement.length === 0) {
+				return;
+			}
+			
+			basePath = scriptElement.attr('src').replace(scriptFile, '');
 		}
-		
-		// extract the path from the src attribute
-		basePath = scriptElement.attr('src').replace('steamprofile.js', '');
 		
 		// load xml config
 		jQuery.ajax({
 			type: 'GET',
-			url: basePath + 'steamprofile.xml',
+			url: basePath + configFile,
 			dataType: 'html',
 			complete: function(request, status) {
 				configData = $(request.responseXML);
@@ -164,7 +179,7 @@ function SteamProfile() {
 	};
 	
 	function getXMLProxyURL(profileID) {
-		return basePath + '../xmlproxy.php?id=' + escape(profileID) + '&lang=' + escape(lang);
+		return basePath + proxyFile + '?id=' + escape(profileID) + '&lang=' + escape(lang);
 	}
 	
 	function getConfigString(name) {
