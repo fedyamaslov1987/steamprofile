@@ -1,7 +1,7 @@
 <?php
 /*
  *	Written by Nico Bergemann <barracuda415@yahoo.de>
- *	Copyright 2010 Nico Bergemann
+ *	Copyright 2011 Nico Bergemann
  *
  *	This program is free software: you can redistribute it and/or modify
  *	it under the terms of the GNU General Public License as published by

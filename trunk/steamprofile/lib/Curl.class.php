@@ -49,7 +49,7 @@ class Curl {
 
 	public function setOutputFile($file) {
 		if(is_resource($file)) {
-		$this->rOutputFile = $file;
+			$this->rOutputFile = $file;
 			$this->setOption(CURLOPT_FILE, $file);
 		} else {
 			$this->rOutputFile = fopen($file, 'w+b');
@@ -89,7 +89,6 @@ class Curl {
 		curl_close($this->rCurlSession);
 
 		if(is_resource($this->rOutputFile)) {
-			rewind($this->rOutputFile);
 			fclose($this->rOutputFile);
 		}
 	}
