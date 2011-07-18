@@ -17,8 +17,7 @@
  *	along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-abstract class Config{
-
+abstract class Config {
 	abstract public function getString($sKey, $sDefault = '');
 	abstract public function getInteger($sKey, $iDefault = 0);
 	abstract public function getFloat($sKey, $fDefault = 0.0);

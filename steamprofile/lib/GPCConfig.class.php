@@ -16,17 +16,15 @@
  *	You should have received a copy of the GNU General Public License
  *	along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
- 
-require_once 'ArrayConfig.class.php';
 
-class GpcConfig extends ArrayConfig {
+class GPCConfig extends ArrayConfig {
 	private static $aInstances = array();
 
 	public static function getInstance($sGPC) {
 		if (isset(self::$aInstances[$sGPC])) {
 			return self::$aInstances[$sGPC];
 		} else {
-			return self::$aInstances[$sGPC] = new GpcConfig($sGPC);
+			return self::$aInstances[$sGPC] = new GPCConfig($sGPC);
 		}
 	}
 	
@@ -36,15 +34,15 @@ class GpcConfig extends ArrayConfig {
 		switch ($sGPC) {
 			case 'get':
 				$aConfig = $_GET;
-			break;
+				break;
 			
 			case 'post':
 				$aConfig = $_POST;
-			break;
+				break;
 			
 			case 'cookie':
 				$aConfig = $_COOKIE;
-			break;
+				break;
 			
 			default:
 				throw new InvalidArgumentException('Invalid config mode');

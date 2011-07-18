@@ -28,7 +28,7 @@ class SteamProfileImageApp extends SteamProfileApp implements Application {
 			// load config
 			$oCommonConfig = FileConfig::getInstance('common.cfg');
 			$oImageConfig = FileConfig::getInstance('image.cfg');
-			$oGpcConfig = GpcConfig::getInstance('get');
+			$oGPCConfig = GPCConfig::getInstance('get');
 			
 			// load config vars
 			$iCacheLifetime = $oCommonConfig->getInteger('cache.lifetime', 600);
@@ -37,8 +37,8 @@ class SteamProfileImageApp extends SteamProfileApp implements Application {
 			$bImageFallback = $oImageConfig->getString('image.fallback', true);
 			$sDefaultLayout = $oImageConfig->getString('image.layout.default', 'small');
 			$sDefaultTheme = $oImageConfig->getString('image.theme.default', 'default');
-			$sLayout = $oGpcConfig->getAlphanumString('layout', $sDefaultLayout);
-			$sTheme = $oGpcConfig->getAlphanumString('theme', $sDefaultTheme);
+			$sLayout = $oGPCConfig->getAlphanumString('layout', $sDefaultLayout);
+			$sTheme = $oGPCConfig->getAlphanumString('theme', $sDefaultTheme);
 			
 			// init cache
 			$oImageCache = new Cache($sCacheDir, $iCacheLifetime, 'png');
