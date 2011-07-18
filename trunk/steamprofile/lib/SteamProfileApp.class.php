@@ -47,10 +47,10 @@ abstract class SteamProfileApp {
 	
 	public function getProfileUrl($bLang = true) {
 		// load config
-		$oGpcConfig = GpcConfig::getInstance('get');
+		$oGPCConfig = GPCConfig::getInstance('get');
 	
 		// get selected id
-		$sID = $oGpcConfig->getString('id', null);
+		$sID = $oGPCConfig->getString('id', null);
 		
 		if($sID == null) {
 			throw new Exception('No profile ID assigned');
@@ -75,7 +75,7 @@ abstract class SteamProfileApp {
 		$sXmlUrl .= '?xml=1';
 	
 		// get language setting
-		$sLang = $oGpcConfig->getString('lang', null);
+		$sLang = $oGPCConfig->getString('lang', null);
 		
 		if(!$bLang || $sLang == null) {
 			// we're done here

@@ -22,7 +22,7 @@ jQuery.fn.attrAppend = function(name, value) {
 		elem = $(this);
 		
 		// append attribute only if extisting and not empty
-		if(elem.attr(name) !== undefined && elem.attr(name) != "") {
+		if (elem.attr(name) !== undefined && elem.attr(name) != "") {
 			elem.attr(name, value + elem.attr(name));
 		}
 	});
@@ -41,7 +41,7 @@ function SteamProfile() {
 	var langLocal = "english";
 	var langData = {
 		english : {
-			loading : "Loading…",
+			loading : "Loading...",
 			no_profile : "This user has not yet set up their Steam Community profile.",
 			private_profile : "This profile is private.",
 			invalid_data : "Invalid profile data.",
@@ -50,7 +50,7 @@ function SteamProfile() {
 			view_tf2items : "View TF2 Backpack"
 		},
 		german : {
-			loading : "Lade…",
+			loading : "Lade...",
 			no_profile : "Dieser Benutzer hat bisher kein Steam Community Profil angelegt.",
 			private_profile : "Dieses Profil ist privat.",
 			invalid_data : "Ungültige Profildaten.",
@@ -59,7 +59,7 @@ function SteamProfile() {
 			view_tf2items : "TF2-Items ansehen"
 		},
 		portuguese : {
-			loading : "Carregando…",
+			loading : "Carregando...",
 			no_profile : "This user has not yet set up their Steam Community profile.",
 			private_profile : "This profile is private.",
 			invalid_data : "Invalid profile data.",
@@ -96,7 +96,7 @@ function SteamProfile() {
 			var scriptElement = $('script[src$=\'' + scriptFile + '\']');
 			
 			// in rare cases, this script could be included without <script>
-			if(scriptElement.length === 0) {
+			if (scriptElement.length === 0) {
 				return;
 			}
 			
@@ -118,7 +118,7 @@ function SteamProfile() {
 	this.refresh = function() {
 		// make sure we already got a loaded config
 		// and no pending profile loads
-		if(!configLoaded || loadLock) {
+		if (!configLoaded || loadLock) {
 			return;
 		}
 		
@@ -129,7 +129,7 @@ function SteamProfile() {
 		profiles = $('.steamprofile[title]');
 		
 		// are there any profiles to build?
-		if(profiles.length === 0) {
+		if (profiles.length === 0) {
 			return;
 		}
 
@@ -150,7 +150,7 @@ function SteamProfile() {
 	this.load = function(profileID) {
 		// make sure we already got a loaded config
 		// and no pending profile loads
-		if(!configLoaded || loadLock) {
+		if (!configLoaded || loadLock) {
 			return;
 		}
 		
@@ -198,7 +198,7 @@ function SteamProfile() {
 		langLocal = lang;
 		
 		// fall back to english if no translation is available for the selected language in SteamProfile
-		if(langData[langLocal] == null) {
+		if (langData[langLocal] == null) {
 			langLocal = "english";
 		}
 	
@@ -231,7 +231,7 @@ function SteamProfile() {
 
 	function loadProfile(profileIndex) {
 		// check if we have loaded all profiles already
-		if(profileIndex >= profiles.length) {
+		if (profileIndex >= profiles.length) {
 			// unlock loading
 			loadLock = false;
 			return;
@@ -240,7 +240,7 @@ function SteamProfile() {
 		var profile = $(profiles[profileIndex++]);
 		var profileID = profile.data('profileID');
 		
-		if(profileCache[profileID] == null) {
+		if (profileCache[profileID] == null) {
 			// load xml data
 			jQuery.ajax({
 				type: 'GET',
@@ -297,7 +297,7 @@ function SteamProfile() {
 					profile.find('.sp-bg-fade').removeClass('sp-bg-fade');
 				}
 				
-				if(showSliderMenu) {
+				if (showSliderMenu) {
 					if (profileData.find('profile > inGameInfo > gameJoinLink').length !== 0) {
 						// add 'Join Game' link href
 						profile.find('.sp-joingame').attr('href', profileData.find('profile > inGameInfo > gameJoinLink').text());
@@ -306,7 +306,7 @@ function SteamProfile() {
 						profile.find('.sp-joingame').remove();
 					}
 				
-					if(showTF2ItemsIcon) {
+					if (showTF2ItemsIcon) {
 						// add 'View Items' link href
 						profile.find('.sp-viewitems')
 							.attr('href', 'http://tf2items.com/profiles/' + profileData.find('profile > steamID64').text());
